@@ -592,6 +592,10 @@ html.SHINE .shine-menu-button:hover{
     transform:scale(1.1,1.1);
 }
 
+html.SHINE .shine-menu-button.shine-navicon:hover{
+    transform:scale(1,1) !important;
+}
+
 .shine-menu-button label{
     position: absolute;
     display: block;
@@ -666,11 +670,6 @@ html.SHINE .shine-navicon .lines{
     transition:all 500ms ease;
 }
 
-html.SHINE .shine-nav:hover .shine-navicon .lines{
-    background:transparent;
-    left:11px;
-}
-
 html.SHINE .shine-navicon .lines::before{
     content:'';
     position: absolute;
@@ -681,10 +680,6 @@ html.SHINE .shine-navicon .lines::before{
     background:#fff;
     transition:transform 500ms ease;
     transform-origin: right;
-}
-
-html.SHINE .shine-nav:hover .shine-navicon .lines::before{
-    transform: rotate(-45deg);
 }
 
 html.SHINE .shine-navicon .lines::after{
@@ -699,9 +694,22 @@ html.SHINE .shine-navicon .lines::after{
     transform-origin: right;
 }
 
+/*
+
+html.SHINE .shine-nav:hover .shine-navicon .lines{
+    background:transparent;
+    left:11px;
+}
+
+html.SHINE .shine-nav:hover .shine-navicon .lines::before{
+    transform: rotate(-45deg);
+}
+
 html.SHINE .shine-nav:hover .shine-navicon .lines::after{
     transform: rotate(45deg);
 }
+
+*/
 
 html.SHINE .shine-nav:hover .shine-submit,
 html.SHINE .shine-nav:hover .shine-multi,

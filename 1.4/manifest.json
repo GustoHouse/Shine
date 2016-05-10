@@ -1,0 +1,90 @@
+{
+"manifest_version": 2,
+
+"name": "SHINE for reddit",
+"short_name": "SHINE",
+"description": "Experience reddit with new modern list and grid view interfaces that focus on bringing the content to you.",
+"version": "1.3.8",
+
+"icons":{
+	"16":"icon-16.png",
+	"48":"icon-48.png",
+	"128":"icon-128.png"
+},
+
+"permissions":[
+	"storage"
+],
+
+"content_scripts":[
+	{
+		"matches": ["*://*.reddit.com/*"],
+		"css": ["fonts.css","base.css","shine-grid.css","shine-list.css","shine-list-classic.css","shine-default.css","nightmode.css"],
+		"js": ["jquery.js","css.js","cycle.js","base.js"]
+	}
+],
+
+"browser_action":{
+	"default_icon": "icon-128.png"
+},
+
+"background":{
+	"scripts": ["background.js"]
+},
+
+"web_accessible_resources": [
+	"jquery.zoom.min.js",
+	"shine-grid.js",
+	"shine-list.js",
+	"shine-default.js",
+	"account-switcher.svg",
+	"nomail.svg",
+	"yesmail.svg",
+	"res.svg",
+	"comments.svg",
+	"save.svg",
+	"unsave.svg",
+	"hide.svg",
+	"upvote.svg",
+	"downvote.svg",
+	"login.svg",
+	"youtube.svg",
+	"gif.svg",
+	"album.svg",
+	"submit.svg",
+	"sidebar.svg",
+	"multis.svg",
+	"settings.svg",
+	"search.svg",
+	"logo.svg",
+	"shine.svg",
+	"dropdown.svg",
+	"subscribe.svg",
+	"unsubscribe.svg",
+	"shinebright.svg",
+	"whiteshinebright.svg",
+	"sunburst.png",
+	"logout.svg",
+	"newtab.svg",
+	"account-logout.svg",
+	"night-account-logout.svg",
+	"night-shine.svg",
+	"night-account-switcher.svg",
+	"night-nomail.svg",
+	"night-res.svg",
+	"night-comments.svg",
+	"night-save.svg",
+	"night-hide.svg",
+	"night-newtab.svg",
+	"night-login.svg",
+	"shine01.jpg",
+	"shine02.jpg",
+	"shine03.jpg",
+	"shine04.jpg",
+	"shine05.jpg",
+	"shine06.jpg"
+],
+
+"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'"
+
+}
