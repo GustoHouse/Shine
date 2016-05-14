@@ -675,11 +675,14 @@ function SHINE(){
             chrome.storage.sync.set({"shine": currentSettings}, function(){
                 
                 replacePanel = ''+
-                'success!'+
-                '<a id="bright-logout">logout</a>';
+                '<div class="shining-bright">'+
+                    '<div id="sunburst"><img src="' + chrome.extension.getURL("sunburst.png") + '" /></div>'+
+                    '<h1>You did it!</h1>'+
+                    "<p>You've just unlocked the best way to experience all the delicious content reddit has to offer. You'll also have first access to all the sweet new features we'll be adding over the months and years to come. We are now massively in your debt and appreciate you supporting the hard work we've put into building SHINE. If you have any feedback or questions for us, please feel free to post in <a target='_blank' href='/r/shine'>/r/shine</a> or email us at <a target='_blank' href='mailto:shine@madewithgusto.com'>shine@madewithgusto.com</a></p><p><i>May the force be with you.</i></p><p>-The SHINE team at Gusto Creative House</p>"+
+                    '<div id="shine-bright-logout">Logout of Shine Bright <img src="' + chrome.extension.getURL("logout.svg") + '" /></div>'+
+                '</div>';
                 
                 $('.shine-bright-panel').html(replacePanel);
-                
 
             });
             
@@ -712,7 +715,16 @@ function SHINE(){
         
     }else{
         
-        $('body').append('<div class="shine-bright-panel"></div>');
+        $('body').append(''+
+             '<div class="shine-bright-panel">'+
+                '<div class="shining-bright">'+
+                    '<div id="sunburst"><img src="' + chrome.extension.getURL("sunburst.png") + '" /></div>'+
+                    '<h1>You did it!</h1>'+
+                    "<p>You've just unlocked the best way to experience all the delicious content reddit has to offer. You'll also have first access to all the sweet new features we'll be adding over the months and years to come. We are now massively in your debt and appreciate you supporting the hard work we've put into building SHINE. If you have any feedback or questions for us, please feel free to post in <a target='_blank' href='/r/shine'>/r/shine</a> or email us at <a target='_blank' href='mailto:shine@madewithgusto.com'>shine@madewithgusto.com</a></p><p><i>May the force be with you.</i></p><p>-The SHINE team at Gusto Creative House</p>"+
+                    '<div id="shine-bright-logout">Logout of Shine Bright <img src="' + chrome.extension.getURL("logout.svg") + '" /></div>'+
+                '</div>'+
+             '</div>'
+        );
         
     }
 
@@ -730,7 +742,7 @@ function SHINE(){
 
 	});
     
-    $('body').on('click','#bright-logout', function(){
+    $('body').on('click','#shine-bright-logout', function(){
        
         currentSettings.account.status = "shinelight";
         

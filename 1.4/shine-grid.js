@@ -640,15 +640,6 @@ function getGalleryImage(api, target){
 }
 
 
-// IMGUR GALLERY
-function getEntireImgurGallery(api){
-    
-    
-    
-}
-
-
-
 
 
 

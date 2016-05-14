@@ -711,15 +711,15 @@ $('body').on('click','div.content div#siteTable.linklisting > .thing:not(.shine-
 				      			captionDescription = captionDescription.replace('"',"'");
       						}
 
-      						$(theExpand).find('.album-thumbnails').append('<img data-title="' + captionTitle + '" data-description="' + captionDescription + '" data-image="' + data.data[i].link + '" src="//i.imgur.com/' + data.data[i].id + 't.jpg" />');
+      						$(theExpand).find('.album-thumbnails').append('<img data-title="' + captionTitle + '" data-description="' + captionDescription + '" data-image="' + data.data[i].link.replace("http","https") + '" src="//i.imgur.com/' + data.data[i].id + 't.jpg" />');
 
 				      	}
 
 				      	$(theExpand).find('.album-thumbnails').find("img").first().addClass("active-thumb");
 
-				      	$(theExpand).find('.large-album').css("background-image", "url(" + data.data[0].link + ")" );
+				      	$(theExpand).find('.large-album').css("background-image", "url(" + data.data[0].link.replace("http","https") + ")" );
 
-				      	$(theExpand).find('.large-album').zoom({url: data.data[0].link, on: 'click'});
+				      	$(theExpand).find('.large-album').zoom({url: data.data[0].link.replace("http","https"), on: 'click'});
 
 				      	if( data.data[0].title != null || data.data[0].description != null ){
 
@@ -754,11 +754,122 @@ $('body').on('click','div.content div#siteTable.linklisting > .thing:not(.shine-
 				$(theExpand).attr("data-original-data", "comments");
 
 			}else if( url.toLowerCase().indexOf("/gallery/") != -1 ){
+                
+                
+                
+                
+                
+                
+                
+                // this is a gallery
+                galleryID = url.substr(url.toLowerCase().indexOf("/gallery/") + 9);	
+				galleryID = galleryID.split(/[?#]/)[0];
+                
+                $.ajax({
+			      url: "https://api.imgur.com/3/gallery/album/" + galleryID,
+			      type: 'GET',
+			      dataType: 'json',
+			      success: function(data) { 
+                      
+                      
+                      
+                      albumID = data.data.id;
+                      //ALBUM CODE
+                      
+                      if( data.data.images.length > 1 ){
+                          
+                          $.ajax({
+                              url: "https://api.imgur.com/3/album/" + albumID + "/images",
+                              type: 'GET',
+                              dataType: 'json',
+                              success: function(data) { 
+                                  
 
-				$(theExpand).addClass("just-comments");
 
-				$(theExpand).attr("data-original-type", "comments");
-				$(theExpand).attr("data-original-data", "comments");
+                                    $(theExpand).find('.large-area').html('<div class="large-album"></div><div class="album-thumbnails"></div><div class="album-captions"></div>');
+
+                                    $('.active-album').removeClass("active-album");
+                                    $(theExpand).find(".large-album").addClass("active-album");
+
+                                    for( i = 0; i < data.data.length; i++ ){
+
+                                        captionTitle = data.data[i].title;
+                                        captionDescription = data.data[i].description;
+
+                                        if( captionTitle != null){
+                                            captionTitle = captionTitle.replace('"',"'");
+                                        }
+
+                                        if( captionDescription != null){
+                                            captionDescription = captionDescription.replace('"',"'");
+                                        }
+
+                                        $(theExpand).find('.album-thumbnails').append('<img data-title="' + captionTitle + '" data-description="' + captionDescription + '" data-image="' + data.data[i].link.replace("http","https") + '" src="//i.imgur.com/' + data.data[i].id + 't.jpg" />');
+
+                                    }
+
+                                    $(theExpand).find('.album-thumbnails').find("img").first().addClass("active-thumb");
+
+                                    $(theExpand).find('.large-album').css("background-image", "url(" + data.data[0].link.replace("http","https") + ")" );
+
+                                    $(theExpand).find('.large-album').zoom({url: data.data[0].link.replace("http","https"), on: 'click'});
+
+                                    if( data.data[0].title != null || data.data[0].description != null ){
+
+                                        $(theExpand).find('.album-captions').html('<div class="show-captions"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-291 389 20 16" style="enable-background:new -291 389 20 16;" xml:space="preserve"><path d="M-273,389h-16c-1.1,0-2,0.9-2,2v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2v-12C-271,389.9-271.9,389-273,389z M-289,397h4v2h-4V397z M-279,403h-10v-2h10V403z M-273,403h-4v-2h4V403z M-273,399h-10v-2h10V399z"/></svg></div><div class="caption-text"><strong></strong><p></p></div>');
+
+                                        if( data.data[0].title != null ){
+                                            $(theExpand).find('.caption-text strong').html(data.data[0].title);
+                                        }
+
+                                        if( data.data[0].description != null ){
+                                            $(theExpand).find('.caption-text p').html(data.data[0].description);	
+                                        }
+
+                                    }
+
+                                    $(theExpand).attr("data-original-type", "album");
+                                    $(theExpand).attr("data-original-data", "https://api.imgur.com/3/album/" + albumID + "/images");
+
+                              },
+                              error: function(request, status, message) { 
+                                console.log(message); 
+                              },
+                              beforeSend: setHeader
+                            });
+                          
+                          
+
+                      }else{
+
+                            getImageFromServer( data.data.images[0].link.replace("http","https") , data.data.images[0].id , theExpand); 
+
+                      }
+                      
+                      // END ALBUM CODE
+                      
+                      
+                      
+                  },
+			      error: function(request, status, message) { 
+			      	console.log(message); 
+			      },
+			      beforeSend: setHeader
+			    });
+
+				
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
 				
 			}else if( url.toLowerCase().indexOf(".gifv") != -1 ){
 
@@ -1418,15 +1529,15 @@ function getCommentAlbumImages( api, target ){
       			captionDescription = captionDescription.replace('"',"'");
 			}
 
-			$(target).find('.album-thumbnails').append('<img data-title="' + captionTitle + '" data-description="' + captionDescription + '" data-image="' + data.data[i].link + '" src="//i.imgur.com/' + data.data[i].id + 't.jpg" />');
+			$(target).find('.album-thumbnails').append('<img data-title="' + captionTitle + '" data-description="' + captionDescription + '" data-image="' + data.data[i].link.replace("http","https") + '" src="//i.imgur.com/' + data.data[i].id + 't.jpg" />');
 
       	}
 
       	$(target).find('.album-thumbnails img').first().addClass("active-thumb");
 
-      	$(target).find('.large-album').css("background-image", "url(" + data.data[0].link + ")" );
+      	$(target).find('.large-album').css("background-image", "url(" + data.data[0].link.replace("http","https") + ")" );
 
-      	$(target).find('.large-album').zoom({url: data.data[0].link, on: 'click'});
+      	$(target).find('.large-album').zoom({url: data.data[0].link.replace("http","https"), on: 'click'});
 
       	if( data.data[0].title != null || data.data[0].description != null ){
 
