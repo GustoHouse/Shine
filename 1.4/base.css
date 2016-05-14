@@ -514,7 +514,8 @@ html.SHINE #RESSearchMenuItem{
 
 html.SHINE.expanding body,
 html.SHINE.show-search body,
-html.SHINE.show-settings body{
+html.SHINE.show-settings body,
+html.SHINE.show-shine-bright body{
     position: absolute;
     overflow: hidden;
     width:100%;
@@ -542,7 +543,7 @@ html.SHINE .shine-nav{
     position: fixed;
     bottom:0px;
     right:0px;
-    padding:60px;
+    padding: 15px 60px 60px 15px;
     z-index: 12001;
     display: flex;
     flex-direction: column;
@@ -1201,6 +1202,11 @@ html.SHINE .shine-expand a.shine-comment.closecommentmedia:after {
     content: 'X close' !important;
 }
 
+html.SHINE .shine-grid .side-comments .RES-keyNav-activeElement .md-container,
+html.SHINE .shine-list .side-comments .RES-keyNav-activeElement .md-container{
+    background-color: transparent !important;
+}
+
 html.SHINE .settings-panel{
     display:none;
     position: fixed;
@@ -1546,6 +1552,9 @@ html.SHINE .menuarea .drop-choices a::before {
 
 
 
+
+
+
 /* SHINE BRIGHT STYLING */
 
 .shine-bright-panel {
@@ -1566,451 +1575,6 @@ html.SHINE .menuarea .drop-choices a::before {
 
 html.SHINE.show-shine-bright .shine-bright-panel{
     display:block !important;
-}
-
-.shine-bright-details{
-    position: absolute;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    left: 0px;
-    top: 0px;
-    width: 40%;
-    box-sizing: border-box;
-    height: 100%;
-    background: rgb(255,105,0);
-}
-
-html.shinebright .shine-bright-details{
-    display:none !important;
-}
-
-.shine-bright-panel #checkout{
-    position: absolute;
-    right:0px;
-    top:0px;
-    width:60%;
-    box-sizing:border-box;
-    height:100%;
-    background:transparent;
-    padding:45px;
-    overflow-y:auto;
-}
-
-.shine-bright-panel #checkout h2 {
-    font-size: 30px;
-    font-weight: 100;
-    color: rgb(255,105,0);
-}
-
-.shine-bright-panel #checkout p {
-    font-size: 14px;
-    line-height: 24px;
-    width: 100%;
-    float: left;
-    padding-right: 25%;
-    box-sizing: border-box;
-    margin: 15px 0;
-}
-
-.shine-bright-panel #checkout label {
-    display: block;
-    position: relative;
-    float: left;
-    width: 100%;
-    cursor: default;
-    box-sizing: border-box;
-}
-
-.shine-bright-panel #checkout label span {
-    display: block;
-    position: absolute;
-    left: 15px;
-    top: 30px;
-    font-size: 16px;
-    color: #666;    
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    transition:all 300ms ease;
-}
-
-.shine-bright-panel #checkout label input {
-    display: block;
-    -webkit-appearance: none;
-    border: 0px;
-    border-bottom: 1px solid #DDD;
-    width: 100%;
-    padding: 30px 15px 15px 15px;
-    outline: none;
-    box-sizing: border-box;
-    font-size: 16px;
-    cursor: default;
-    color: #000;
-    font-weight: 400;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 18px;
-    background:#fff;
-}
-
-.shine-bright-panel #checkout label input#shine_p{
-    -webkit-text-security: disc !important;
-}
-
-.shine-bright-panel #checkout label input:focus{
-    background:#FAFAFA;
-}
-
-.shine-bright-panel #checkout label.hastext span {
-    color: #6e787f;
-    font-size: 12px;
-    top: 14px;
-}
-
-.shine-bright-panel em {
-    display: block;
-    padding: 5px 0 15px 15px;
-    font-size: 10px;
-    float:left;
-    width:100%;
-    box-sizing:border-box;
-}
-
-select#shine-bright-price-picker {
-    float: left;
-    -webkit-appearance: none;
-    border: 0px;
-    font-size: 24px;
-    font-weight: 100;
-    font-family: 'Open Sans', sans-serif;
-    border-radius: 5px;
-    margin-top: 15px;
-    height: 60px;
-    margin-right: 15px;
-    padding: 0 45px 0 15px;
-    cursor: pointer;
-    background:url('chrome-extension://__MSG_@@extension_id__/dropdown.svg') no-repeat calc(100% - 15px) center #EEE;
-    background-size:20px;
-}
-
-.shine-bright-panel #checkout input#braintree-submit {
-    -webkit-appearance: none;
-    border: 0px;
-    background: #009cde;
-    color: #fff;
-    font-weight: 400;
-    display: block;
-    float: left;
-    box-sizing: border-box;
-    border-radius: 5px;
-    font-size: 24px;
-    margin-top: 15px;
-    width: auto;
-    padding: 15px 45px;
-}
-
-.shine-bright-panel #checkout input#braintree-submit:hover{
-    background:#008ac5;    
-}
-
-html.SHINE iframe#braintree-dropin-modal-frame {
-    z-index: 100000 !important;
-}
-
-.shine-bright-panel #checkout label.notvalid span{
-    color:#d0021b !important;
-}
-.shine-bright-panel #checkout label.notvalid input{
-    color:#d0021b !important;
-    border-bottom:3px solid #d0021b !important;
-}
-
-.shine-forgot-password label,
-.shine-bright-login label {
-    display: block;
-    float: left;
-    width: 100%;
-}
-
-.shine-forgot-password label span,
-.shine-bright-login label span {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 5px;
-    float: left;
-    width: 100%;
-}
-
-.shine-forgot-password,
-.shine-bright-login {
-    color: #fff;
-    width: 70%;
-}
-
-.shine-forgot-password input[type=text],
-.shine-bright-login input[type=text] {
-    display: block;
-    -webkit-appearance: none;
-    border: 0px;
-    border-bottom: 1px solid rgba(255,255,255,.5) !important;
-    background: rgba(255,255,255,.2) !important;
-    font-size: 16px;
-    padding: 10px 15px;
-    width: 100%;
-    margin: 0 0 15px 0;
-    box-sizing: border-box;
-    font-size: 24px;
-    font-weight: 100;
-    font-family: 'open sans'sans-serif;
-    outline: none;
-    color: #fff !important;
-}
-
-.shine-bright-login #shine-login-p{
-    -webkit-text-security: disc;
-}
-
-.shine-forgot-password h2,
-.shine-bright-login h2{
-    font-size: 30px;
-    font-weight: 100;
-    color: #fff;
-    display: block;
-    float: left;
-    width: 100%;
-    margin-bottom: 15px;    
-}
-
-.shine-forgot-password input[type=submit],
-.shine-bright-login input[type=submit]{
-    display: block;
-    -webkit-appearance: none;
-    border: 0px;
-    border-radius: 5px;
-    background: #fff;
-    color: rgb(255,105,0);
-    font-size: 24px;
-    font-weight: 100;
-    font-family: 'open sans' sans-serif;
-    padding: 10px 0;
-    width: 100%;
-    float: left;
-    margin-top: 15px;    
-    outline:none;
-}
-
-.shine-forgot-password #forgot-message,
-.shine-bright-login #login-message{
-    font-size: 12px;
-    display: block;
-    float: left;
-    margin-top: 10px;
-    font-weight: bold;    
-}
-
-.shine-why-bright {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    padding: 7%;
-    background: rgb(255,105,0);
-    color: #fff;
-    justify-content:space-between;
-}
-
-.shine-why-bright h2 {
-    color: #fff;
-    font-size: 24px;
-    font-weight: 100;
-    text-align: center;
-}
-
-.shine-why-bright h2 span{
-    display:block;
-    font-size:14px;
-    font-weight:bold;
-    color:#fff;
-    font-weight:100;
-    margin-top:5px;
-}
-
-.shine-why-bright h2 a {
-    font-size: 14px;
-    font-weight:100;
-    color: #fff !important;
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-.bright-cycle .cycle-slide {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.shine-why-bright img {
-    width: 100%;
-    border: 10px solid #fff;
-    box-sizing: border-box;
-    float: left;
-    margin-bottom: 15px;
-}
-
-.shine-why-bright strong {
-    display: block;
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    float: left;
-    width: 100%;
-}
-
-.shine-why-bright p {
-    display: block;
-    float: left;
-    width: 100%;
-    font-size: 16px;
-    line-height: 24px;
-}
-
-.cycle-pager {
-    font-size: 45px;
-    letter-spacing: 5px;
-}
-
-.cycle-pager span {
-    opacity: .5;
-    cursor: pointer;
-}
-
-.cycle-pager span.cycle-pager-active {
-    opacity: 1;
-}
-
-.bright-footer {
-    font-size: 14px;
-    line-height: 20px;
-}
-
-.bright-footer a{
-    color:#fff;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.shining-bright {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    color:#fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(235,80,0,1)), color-stop(100%,rgba(255,105,0,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  rgba(235,80,0,1) 0%,rgba(255,105,0,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: linear-gradient(to bottom,  rgba(235,80,0,1) 0%,rgba(255,105,0,1) 100%); /* W3C */
-
-}
-
-html.SHINE.shinelight .shining-bright{
-    display:none !important;
-}
-
-html.SHINE .shining-bright #sunburst{
-    position:absolute;
-    bottom:-100px;
-    left:0px;
-    width:100%;
-    height:1px;
-    overflow:visible;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-}
-
-@-webkit-keyframes spin {
-    from {
-        -webkit-transform:rotate(0deg);
-    }
-    to {
-        -webkit-transform:rotate(360deg);
-    }
-}
-
-html.SHINE .shining-bright #sunburst img {
-    -webkit-animation-name: spin;
-    -webkit-animation-duration: 45000ms;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-timing-function: linear;    
-}
-
-.shining-bright h1 {
-    font-size: 90px;
-    font-weight: 100;
-    text-transform: uppercase;
-    font-weight: bold;
-    float: left;
-    width: 80%;
-    text-align: center;
-    max-width: 750px;
-    position: relative;
-    z-index: 10;
-    border-bottom:0px !important;
-}
-
-
-.shining-bright p {
-    width: 80%;
-    max-width: 750px;
-    float: left;
-    font-size: 16px;
-    line-height: 21px;
-    margin-bottom: 30px;
-    text-align: justify;
-    position: relative;
-    z-index: 10;
-}
-
-.shining-bright p i{
-    font-style:oblique;
-}
-
-.shining-bright a{
-    color:#fff !important;
-    text-decoration: underline;
-}
-
-div#shine-bright-logout {
-    position: absolute;
-    right: 15px;
-    bottom: 15px;
-    z-index: 10;
-    font-size: 13px;
-    line-height: 20px;
-    cursor: pointer;
-}
-
-#shine-bright-logout img {
-    height: 15px;
-    width: auto;
-    display: inline-block;
-    margin-left: 5px;
-    vertical-align: text-top;
-}
-
-#shine-go-back-to-login,
-span#shine-forgot {
-    cursor: pointer;
-    text-decoration: underline;
-    float: right;
-    font-size: 14px;
 }
 
 #header .header-shine-bright{
@@ -2041,16 +1605,6 @@ html.SHINE.shinelight .shine-comment::after{
     background: #777 !important;
     color: #DDD !important;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2167,4 +1721,22 @@ html.SHINE.res-nightmode div#RESShortcutsTrash {
 
 html.SHINE.res-nightmode form.logout a {
     background-image: url('chrome-extension://__MSG_@@extension_id__/night-account-logout.svg');
+}
+
+html.SHINE table#srList {
+    position: fixed !important;
+    top: 65px !important;
+    max-height: calc(100vh - 65px) !important;
+}
+
+html.SHINE .drop-choices.srdrop.inuse {
+    position: fixed !important;
+    z-index: 10000 !important;
+    left: 0px !important;
+    margin: 0px !important;
+    height: calc(100vh - 65px) !important;
+    top: 65px !important;
+    overflow-y: scroll !important;
+    padding: 15px !important;
+    box-sizing: border-box !important;
 }

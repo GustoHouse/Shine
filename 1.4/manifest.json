@@ -4,7 +4,7 @@
 "name": "SHINE for reddit",
 "short_name": "SHINE",
 "description": "Experience reddit with new modern list and grid view interfaces that focus on bringing the content to you.",
-"version": "1.3.8",
+"version": "1.4",
 
 "icons":{
 	"16":"icon-16.png",
@@ -20,7 +20,7 @@
 	{
 		"matches": ["*://*.reddit.com/*"],
 		"css": ["fonts.css","base.css","shine-grid.css","shine-list.css","shine-list-classic.css","shine-default.css","nightmode.css"],
-		"js": ["jquery.js","css.js","cycle.js","base.js"]
+		"js": ["jquery.js","base.js"]
 	}
 ],
 

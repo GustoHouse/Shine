@@ -1,35 +1,5 @@
-// braintree stuff
-$.getScript('https://js.braintreegateway.com/v2/braintree.js', function(){
-	$('html').addClass("shine-bt-loaded");
-});
-
-
-
-
-
-
-
-
-
-
-
-if( window.location.hash == "#shinebright" ){
-
-	$('html').addClass("show-shine-bright");
-	window.location.hash = "";
-
-}
-
-
-
-
-
-
-
-
-
-
-
+// GLOBAL RESETS AND FIXES 
+$('body').removeClass("listing-chooser-collapsed");
 
 
 
@@ -81,9 +51,9 @@ var currentSettings = {};
 // creating the default settings variable if they havn't saved any settings yet
 var defaultSettings = {"global" : {"layout" : "list", "shortcuts" : "show", "night" : "off", "analytics" : "shine-analytics-optin", "sidebar" : "", "multis" : ""},
 
-    "list" :  {"split" : "7030", "columns" : "one"},
+    "list" :  {"split" : "6040", "columns" : "one"},
 
-    "grid" :  {"columns" : "5", "nsfw" : "no", "split" : "7030"},
+    "grid" :  {"columns" : "5", "nsfw" : "no", "split" : "6040"},
 
     "subreddits" : [
     	{"url" : "www.reddit.com/r/shine/", "layout" : "list"},
@@ -96,7 +66,7 @@ var defaultSettings = {"global" : {"layout" : "list", "shortcuts" : "show", "nig
     	{"url" : "www.reddit.com/user/Abbigale221/m/moviesandtv", "layout" : "list"}
     ],
 
-    "account" : {"email" : "default@default.com", "password" : "default", "status" : "shinelight", "lastchecked" : ""},
+    "account" : {"status" : "shinelight"},
 
     "message" : ""
 
@@ -134,8 +104,7 @@ function SHINE(){
 
 
 
-
-	console.log(currentSettings);
+    //console.log(currentSettings);
 
 
 
@@ -591,10 +560,6 @@ function SHINE(){
 						'width:' + thingWidth + 'px;'+
 						'flex-basis:' + thingWidth + 'px;'+
 					'}'+
-					'html.SHINE.shine-grid body > .content #siteTable .thing .preview.preview-text{'+
-						'flex-basis: auto;'+
-						'max-height:' + thingWidth + 'px;'+
-					'}'+
 				'</style>'
 
 			);
@@ -631,61 +596,6 @@ function SHINE(){
 		// add our view class to the html
 		$('html').addClass("shine-" + whichView);
 
-
-
-		// time to go get a message
-		$.ajax({
-			url: "https://www.madewithgusto.com/SHINE-message.php",
-			type: 'POST',
-			success: function(message) {
-
-				message = JSON.parse(message);
-
-				if(currentSettings.message != message.title){
-
-					if ( message.ctalink != "" ){
-
-						$('body').prepend(''+
-							'<div class="shine-message">'+
-									'<h1>' + message.title + '</h1>'+
-									'<div class="shine-message-body">' +  message.message + '</div>'+
-									'<a target="_blank" class="message-button" href="' + message.ctalink + '">' + message.cta + '</a>'+
-									'<span class="message-close">x</span>'+
-							'</div>'
-						);
-
-					}else{
-
-						$('body').prepend(''+
-							'<div class="shine-message">'+
-									'<h1>' + message.title + '</h1>'+
-									'<div class="shine-message-body">' +  message.message + '</div>'+
-									'<span class="message-close">x</span>'+
-							'</div>'
-						);
-
-					}
-
-					currentSettings.message = message.title;
-
-					chrome.storage.sync.set({"shine": currentSettings});
-
-				}
-
-			},
-			error: function(request, status, message) {
-				console.log(request);
-				console.log(status);
-				console.log(message);
-			}
-		});
-
-
-		$('body').on('click','.message-close', function(){
-
-				$('.shine-message').remove();
-
-		});
 
 
 	}else{
@@ -726,420 +636,91 @@ function SHINE(){
 
 	}
 
-	/*
-
-	function endsWith(str, suffix) {
-    	return str.indexOf(suffix, str.length - suffix.length) !== -1;
-	}
-
-	subredditCss = "";
-	headLinks = $('head link');
-
-	headerStyling = "";
-	headerBottomLeftStyling = "";
-
-	flairCSS = "";
-
-	for(i = 0;i<headLinks.length;i++){
-		
-		if( $(headLinks[i]).attr("title") == "applied_subreddit_stylesheet" ){
-			
-			subredditCss = $(headLinks[i]).attr("href");
-
-			$(headLinks[i]).remove();
-
-		}
-
-	}
-
-
-	if( subredditCss != "" ){
-
-		$.ajax({
-	        type: "GET",
-	        dataType: 'html',
-	        data: 'url=' + subredditCss,
-	        url: 'https://www.madewithgusto.com/SHINE-subreddit.php',
-	        success: function(data){            
-
-	            var parser = new cssjs();
-				var sheet = parser.parseCSS(data);
-
-				for( i = 0; i < sheet.length; i++ ){
-
-					if( sheet[i].selector != undefined && sheet[i].selector != "" ){
-
-						if( endsWith(sheet[i].selector, "#header") ){
-
-							for( j = 0; j < sheet[i].rules.length; j++ ){
-
-								headerStyling = headerStyling + sheet[i].rules[j].directive + ":" + sheet[i].rules[j].value + ";";
-
-							}
-
-						}
-
-						if( endsWith(sheet[i].selector, "#header-bottom-left") ){
-
-							for( j = 0; j < sheet[i].rules.length; j++ ){
-
-								headerBottomLeftStyling = headerBottomLeftStyling + sheet[i].rules[j].directive + ":" + sheet[i].rules[j].value + ";";
-
-							}
-
-						}
-
-						if( sheet[i].selector.indexOf("flair") != -1 ){
-
-							theRules = "";
-
-							for( r = 0; r < sheet[i].rules.length; r ++ ){
-
-								theRules = theRules + sheet[i].rules[r].directive + ":" + sheet[i].rules[r].value + ";";
-
-							}
-
-							flairCSS = flairCSS + sheet[i].selector + "{" + theRules + "} ";
-
-						}
-
-					}
-
-				}
-
-				$('#header').after("<div id='shine-subreddit-header' style='" + headerStyling + "'></div>");
-				$('#shine-subreddit-header').append("<div id='shine-subreddit-header-bottom-left' style='" + headerBottomLeftStyling + "'></div>");
-
-				$('head').append('<style type="text/css">' + flairCSS + '</style>');
-
-	        },
-	        error: function(){
-	            // Boo! Handle the error.
-	        }
-	    }); 
-
-	}
-
-	*/
+	
 	
 
-	
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//braintree form
-	$('body').append(''+
-		'<div class="shine-bright-panel">'+
-			'<div class="shine-bright-details">'+
-				'<div class="shine-bright-login">'+
-					'<h2>Shine Bright Login</h2>'+
-					'<label><span>Email</span><input id="shine-login-e" type="text" /></label>'+
-					'<label><span>Password</span><input id="shine-login-p" type="text" /></label>'+
-					'<span id="shine-forgot">Forgot Password?</span>'+
-					'<input value="Make It So" type="submit" id="shine-bright-login" />'+
-					'<div id="login-message">&nbsp;</div>'+
-				'</div>'+
-				'<div class="shine-forgot-password" style="display:none;">'+
-					'<h2>Forgot Password</h2>'+
-					'<label><span>Email</span><input id="shine-forgot-e" type="text" /></label>'+
-					'<span id="shine-go-back-to-login">Actually, I remember now.</span>'+
-					'<input value="Remind Me" type="submit" id="shine-remind-me" />'+
-					'<div id="forgot-message">&nbsp;</div>'+
-				'</div>'+
-				'<div class="shine-why-bright">'+
-					'<h2>What Shine Bright Includes<span><a target="_blank" href="https://www.reddit.com/r/shine/comments/3m4lv5/whats_the_deal_with_shine_bright/">Full Details</a> | <a class="bright-login-switch">Login</a></span></h2>'+
-					'<div class="bright-cycle">'+
-						'<div class="bright-info">'+
-							'<img src="' + chrome.extension.getURL("shine01.jpg") + '" />'+
-							'<p><strong>Night Mode</strong>You can activate a beautiful dark night mode in the Shine settings panel.</p>'+
-						'</div>'+
-						'<div class="bright-info">'+
-							'<img src="' + chrome.extension.getURL("shine02.jpg") + '" />'+
-							'<p><strong>Inline Media Viewing</strong>When you click the buttons associated with images and video, the content displays on the side, not in a new tab :)</p>'+
-						'</div>'+
-						'<div class="bright-info">'+
-							'<img src="' + chrome.extension.getURL("shine03.jpg") + '" />'+
-							'<p><strong>Alternate List View</strong>This is what the interface looks like if you choose to have the content display on the right.</p>'+
-						'</div>'+
-						'<div class="bright-info">'+
-							'<img src="' + chrome.extension.getURL("shine04.jpg") + '" />'+
-							'<p><strong>Default Settings</strong>Here you can change what your default view is, toggle Night Mode, Show or Hide the subreddits bar at the top, and you can also manage which subreddits and multireddits use which view.</p>'+
-						'</div>'+
-						'<div class="bright-info">'+
-							'<img src="' + chrome.extension.getURL("shine05.jpg") + '" />'+
-							'<p><strong>Grid Settings</strong>Here you can manage how many columns the grid view has, and wether or not to show NSFW content automatically or not.</p>'+
-						'</div>'+
-						'<div class="bright-info">'+
-							'<img src="' + chrome.extension.getURL("shine06.jpg") + '" />'+
-							'<p><strong>List Settings</strong>You can choose where you want the content to display in the List View, below each post, or to the right of the list.</p>'+
-						'</div>'+
-					'</div>'+
-					'<div class="bright-footer">'+
-						'<div class="bright-contact">Email: <a href="mailto:shine@madewithgusto.com">shine@madewithgusto.com</a><br />Phone: (234) 564-8786</div>'+
-						'<div class="bright-policies"><a target="_blank" href="https://www.madewithgusto.com/SHINE-returns.php">Return Policy</a> | <a target="_blank" href="https://www.madewithgusto.com/SHINE-privacy.php">Privacy Policy</a></div>'+
-					'</div>'+
-				'</div>'+
-			'</div>'+
-			'<form id="checkout" method="post" action="/checkout" autocomplete="off">'+
-				'<h2>Get Shine Bright</h2>'+
-				'<p>We are continuing to work hard on new features and improvements, and when you purchase a Shine Bright account, it absolutely helps motivate us to continue. Please fill out the form below, and choose how much you want to spend on a Shine Bright account. We appreciate anything and everything from the bottom of our hearts!</p>'+
-				'<div id="payment-form"></div>'+
-				'<label>'+
-					'<span>Email Address</span>'+
-					'<input type="text" id="shine_e" autocomplete="off" />'+
-				'</label>'+
-				'<label>'+
-					'<span>Password</span>'+
-					'<input type="text" id="shine_p" autocomplete="off" />'+
-					'<em>Your password must be at least 4 characters long.</em>'+
-				'</label>'+
-                '<select id="shine-bright-price-picker">'+
-                     '<option value="1.99">$1.99</option>'+
-                     '<option value="2.99">$2.99</option>'+
-                     '<option value="4.99">$4.99</option>'+
-                     '<option value="9.99">$9.99</option>'+
-                     '<option value="15">$15</option>'+
-                     '<option value="50">$50</option>'+
-                     '<option value="100">$100</option>'+
-                '</select>'+
-				'<input id="braintree-submit" type="submit" value="Get Shine Bright for $1.99">'+
-			'</form>'+
-			'<div class="shining-bright">'+
-				'<div id="sunburst"><img src="' + chrome.extension.getURL("sunburst.png") + '" /></div>'+
-				'<h1>You did it!</h1>'+
-				"<p>You've just unlocked the best way to experience all the delicious content reddit has to offer. You'll also have first access to all the sweet new features we'll be adding over the months and years to come. We are now massively in your debt and appreciate you supporting the hard work we've put into building SHINE. If you have any feedback or questions for us, please feel free to post in <a target='_blank' href='/r/shine'>/r/shine</a> or email us at <a target='_blank' href='mailto:shine@madewithgusto.com'>shine@madewithgusto.com</a></p><p><i>May the force be with you.</i></p><p>-The SHINE team at Gusto Creative House</p>"+
-				'<div id="shine-bright-logout">Logout of Shine Bright <img src="' + chrome.extension.getURL("logout.svg") + '" /></div>'+
-			'</div>'+
-		'</div>'
-	);
-
-
-
-
-	$('.bright-cycle').cycle({
-		'slides':'> div.bright-info',
-		'pager':'.cycle-pager',
-		'auto-height': true,
-		'timeout': 6000
-	});
-	
-	$('.bright-login-switch').click(function(){
-
-		$('.shine-why-bright').remove();
-
-	});
     
-    $('#shine-bright-price-picker').change(function(){
-       
-        $('#braintree-submit').val("Get Shine Bright for $" + $(this).val() );
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // LISTENING FOR MESSAGE FROM IFRAME
+    
+    function listener(event){
         
-    });
-
-
-
-	function validateEmail(email) {
-	    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-	    return re.test(email);
-	}	
-
-	$('body').on('click','#braintree-submit',function(e){
-
-		if( validateEmail( $('#shine_e').val() ) && $('#shine_p').val().length >= 4 ){
-
-			// JUST DO IT
-
-		}else{
-
-			if( validateEmail( $('#shine_e').val() ) == false ){
-
-				$('#shine_e').parents('label').addClass("notvalid");
-
-			}else{
-
-				$('#shine_e').parents('label').removeClass("notvalid");				
-
-			}
-
-			if( $('#shine_p').val().length < 4 ){
-
-				$('#shine_p').parents('label').addClass("notvalid");
-
-			}else{
-
-				$('#shine_p').parents('label').removeClass("notvalid");				
-
-			}
-
-			e.preventDefault();
-			e.stopPropagation();
-			return false;
-
-		}		
-
-	});
-
-	$('body').on('focus blur keydown keyup','#shine_e, #shine_p',function(){
-
-		if( $(this).val() != "" ){
-			$(this).parents('label').addClass("hastext");
-		}else{
-			$(this).parents('label').removeClass("hastext");
-		}
-
-		if( validateEmail( $('#shine_e').val() ) ){
-
-			$('#shine_e').parents('label').removeClass("notvalid");
-
-		}
-
-		if( $('#shine_p').val().length >= 4 ){
-
-			$('#shine_p').parents('label').removeClass("notvalid");
-
-		}
-
-	});
-
-	$('body').on('click','#shine-bright-login',function(){
-
-		if( validateEmail( $('#shine-login-e').val() ) && $('#shine-login-p').val().length >= 4 ){
-
-			$.ajax({
-				url: "https://www.madewithgusto.com/SHINE-customer.php",
-				data: {
-					customerEmail:$('#shine-login-e').val(),
-					customerPassword:$('#shine-login-p').val()
-				},
-				type: 'POST',
-				success: function(customerdata) {
-
-					if(IsJsonString(customerdata)){
-
-						customerdata = JSON.parse(customerdata);
-
-						if( customerdata.status == "shinebright" ){
-
-							currentSettings.account.email = $('#shine-login-e').val();
-							currentSettings.account.password = $('#shine-login-p').val();
-
-							currentSettings.account.status = customerdata.status;
-							currentSettings.account.lastchecked = todayIs;
-
-							chrome.storage.sync.set({"shine": currentSettings}, function(){
-
-								window.location.hash = "shinebright";
-								location.reload();
-
-							});
-
-						}else{
-
-							$('#login-message').html("Sorry there's no account with that email and password.");
-
-						}
-
-					}else{
-
-						$('#login-message').html("Sorry there was a problem connecting to our server.");
-
-					}
-
-				},
-				error: function(request, status, message) {
-					console.log(request);
-					console.log(status);
-					console.log(message);
-
-					$('#login-message').html("Sorry there was a problem connecting to our server.");
-				}
-			});
-
-		}else{
-
-			$('#login-message').html("Please fill out both fields correctly.");
-
-		}
-
-	});
-
-	$('#shine-bright-logout').click(function(){
-
-		currentSettings.account.email = "default@default.com";
-		currentSettings.account.password = "default";
-
-		currentSettings.account.status = "shinelight";
-		currentSettings.account.lastchecked = "";
-
-		chrome.storage.sync.set({"shine": currentSettings}, function(){
-
-			window.location.hash = "shinebright";
-			location.reload();
-
-		});
-
-	});
-
-	$('body').on('click','#shine-forgot', function(){
-
-		$('.shine-bright-login').css("display","none");
-		$('.shine-forgot-password').css("display","block");
-
-	});
-
-	$('#shine-go-back-to-login').click(function(){
-
-		$('.shine-bright-login').css("display","block");
-		$('.shine-forgot-password').css("display","none");
-
-	});
-
-	$('#shine-remind-me').click(function(){
-
-		if( validateEmail( $('#shine-forgot-e').val() ) ){
-
-			$.ajax({
-				url: "https://www.madewithgusto.com/SHINE-forgot.php",
-				data: {
-					customerEmail:$('#shine-forgot-e').val()
-				},
-				type: 'POST',
-				success: function(data) {
-
-					$('#forgot-message').html(data);
-
-				},
-				error: function(request, status, message) {
-					console.log(request);
-					console.log(status);
-					console.log(message);
-
-					$('#forgot-message').html("Sorry there was a problem connecting to our server.");
-				}
-			});
-
-		}else{
-
-			$('#forgot-message').html("Please enter a valid email address");
-
-		}
-
-	});
+        if ( event.origin == "https://madewithgusto.com" && event.data == "shinebright" ){
+            
+            //time to shine bright
+            $('#settings-default-view').removeAttr("disabled");
+            $('#settings-night-mode').removeAttr("disabled");
+            $('#settings-shortcuts-bar').removeAttr("disabled");
+            $('#settings-number-columns').removeAttr("disabled");
+            $('#settings-show-nsfw').removeAttr("disabled");
+            $('#settings-list-layout').removeAttr("disabled");
+            $('#settings-grid-split').removeAttr("disabled");
+            $('#settings-list-split').removeAttr("disabled");
+
+            $('.header-shine-bright').remove();
+            
+            $('html').removeClass('shinelight');
+            $('html').addClass('shinebright');
+            
+            currentSettings.account.status = "shinebright";
+            
+            chrome.storage.sync.set({"shine": currentSettings}, function(){
+                
+                replacePanel = ''+
+                'success!'+
+                '<a id="bright-logout">logout</a>';
+                
+                $('.shine-bright-panel').html(replacePanel);
+                
+
+            });
+            
+        }
+            
+    }
+
+    
+    if (window.addEventListener){
+        
+        addEventListener("message", listener, false);
+        
+    } else {
+        
+        attachEvent("onmessage", listener);
+        
+    }
+	
+
+	//SHINE BRIGHT FORM
+    
+    if( currentSettings.account.status == "shinebright" ){
+        
+        $('body').append(''+
+            '<div class="shine-bright-panel">'+
+                'success!'+
+                '<a id="bright-logout">logout</a>'+
+            '</div>'
+        );
+        
+    }else{
+        
+        $('body').append('<div class="shine-bright-panel"></div>');
+        
+    }
 
 	$('body').on('click','.shine-prompt', function(e){
+        
+        if( currentSettings.account.status == "shinelight" ){
+            $('.shine-bright-panel').html('<iframe id="shine-bright-iframe" frameborder="0" height="100%" width="100%" src="https://madewithgusto.com/SHINE-IFRAME-CREATEACCOUNT.php" />');
+        }
 
 		$('html').addClass("show-shine-bright");
 
@@ -1148,26 +729,24 @@ function SHINE(){
 		return false;
 
 	});
+    
+    $('body').on('click','#bright-logout', function(){
+       
+        currentSettings.account.status = "shinelight";
+        
+        chrome.storage.sync.set({"shine": currentSettings}, function(){
 
-	$('#shine-login-e, #shine-login-p').keyup(function(e){
+			location.reload();
 
-		if( e.which == 13 ){
+		});
+        
+    });
+    
+    
+    
+    
 
-			$('#shine-bright-login').click();
 
-		}
-
-	});
-
-	$('#shine-forgot-e').keyup(function(e){
-
-		if( e.which == 13 ){
-
-			$('#shine-remind-me').click();
-
-		}
-
-	});
 
 
 
@@ -1225,53 +804,7 @@ function getSettings(){
 			// set our currentSettings variable to whatever was stored
 			currentSettings = data.shine;
 
-			// have we checked if we're a paying customer today?
-			if( todayIs != currentSettings.account.lastchecked ){
-
-				// no? okay lets go check
-				$.ajax({
-					url: "https://www.madewithgusto.com/SHINE-customer.php",
-					data: {
-						customerEmail:currentSettings.account.email,
-						customerPassword:currentSettings.account.password
-					},
-					type: 'POST',
-					success: function(customerdata) {
-
-						if(IsJsonString(customerdata)){
-
-							customerdata = JSON.parse(customerdata);
-
-							currentSettings.account.status = customerdata.status;
-							currentSettings.account.lastchecked = todayIs;
-							chrome.storage.sync.set({"shine": currentSettings});
-
-							SHINE();
-
-						}else{
-
-							$('html').addClass("shine-connection-problem");
-
-							SHINE();
-
-						}
-
-					},
-					error: function(request, status, message) {
-						console.log(request);
-						console.log(status);
-						console.log(message);
-
-						SHINE();
-					}
-				});
-
-			}else{
-
-				//we have check today, please continue
-				SHINE();
-
-			}
+			SHINE();
 
 		}
 
@@ -1406,6 +939,11 @@ $('body').on('click','.shine-multi', function(){
 $('body').on('click','.shine-bright-nav', function(){
 
 	resetInterfaces();
+    
+    if( currentSettings.account.status == "shinelight" ){
+        $('.shine-bright-panel').html('<iframe id="shine-bright-iframe" frameborder="0" height="100%" width="100%" src="https://madewithgusto.com/SHINE-IFRAME-CREATEACCOUNT.php" />');
+    }
+    
 	$('html').toggleClass("show-shine-bright");
 
 });

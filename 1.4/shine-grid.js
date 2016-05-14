@@ -53,85 +53,6 @@ if( !$('html').hasClass("shine-analytics-optout") ){
 }
 
 
-/* SHINE BRIGHT STUFF */
-
-/* SHINE BRIGHT STUFF */
-
-function checkBT(){
-
-	if( $('html').hasClass("shine-bt-loaded") ){
-
-		$.ajax({
-			url: 'https://www.madewithgusto.com/SHINE-braintree2.php',
-			success: function(data){
-
-				braintree.setup(data, "dropin", {
-					container: "payment-form",
-					paypal: {
-						singleUse: true,
-						amount: $('#shine-bright-price-picker option:selected').val(),
-						currency: 'USD'
-					}, 
-					onPaymentMethodReceived: function (obj) {
-					    
-						$.ajax({
-							url: "https://www.madewithgusto.com/SHINE-braintree2.php",
-							data: {
-								nonce:obj.nonce,
-                                shine_amount: $('#shine-bright-price-picker option:selected').val(),
-								shine_email: $('#shine_e').val(),
-								shine_password: $('#shine_p').val()
-							},
-							type: 'POST',
-							success: function(accountdata) {
-
-								accountdata = JSON.parse(accountdata);
-
-								if( accountdata.result != "braintreeerror" && accountdata.result != "mysqlerror" ){
-
-									ga('send', 'event', 'PURCHASED' , 'Shine Bright' , window.location.href.replace("https://","") );
-								
-									$('#shine-login-e').val( $('#shine_e').val() );
-									$('#shine-login-p').val( $('#shine_p').val() );
-
-									$('#shine-bright-login').click();
-
-								}else if( accountdata.result == "braintreeerror" ){
-
-									alert('Sorry about this, but there was a problem processing your payment information. Please try a different payment method. If this continues happening please contact us at shine@madewithgusto.com');
-
-								}else if( accountdata.result == "mysqlerror" ){
-
-									alert('Well we were able to process your payment just fine, but it looks like there was a problem conntecting to our databse. Please contact us at shine@madewithgusto.com and we can get your Shine Bright account set up.');
-
-								}else{
-                                    
-                      alert('Looks like something went wrong when trying to set up your account, please contact us at shine@madewithgusto.com if this continues to happen.')
-                      
-                 }
-
-							},
-							error: function(request, status, message) {
-								console.log(request);
-								console.log(status);
-								console.log(message);
-							}
-						});
-
-					}
-				});
-
-			}
-		});
-
-	}else{
-
-		setTimeout(checkBT, 1000);
-	}
-
-}
-
-checkBT();
 
 
 
@@ -202,7 +123,7 @@ function getAlbumImage(api, target){
       dataType: 'json',
       success: function(data) { 
 
-      	$(target).find('.preview-replace, .preview-album').replaceWith("<div data-album='" + api + "' class='preview preview-album' style='background-image:url(" + data.data[0].link + ")'></div>");
+      	$(target).find('.preview-replace, .preview-album').replaceWith("<div data-album='" + api + "' class='preview preview-album' style='background-image:url(" + data.data[0].link.replace("http","https") + ")'></div>");
 
       },
       error: function(request, status, message) { 
@@ -229,6 +150,8 @@ function getEntireAlbum(api){
       type: 'GET',
       dataType: 'json',
       success: function(data) { 
+          
+        console.log(data);
 
       	for( i = 0; i < data.data.length; i++ ){
 
@@ -243,15 +166,15 @@ function getEntireAlbum(api){
       			captionDescription = captionDescription.replace('"',"'");
       		}
 
-      		$('.album-thumbnails').append('<img data-title="' + captionTitle + '" data-description="' + captionDescription + '" data-image="' + data.data[i].link + '" src="//i.imgur.com/' + data.data[i].id + 't.jpg" />');
+      		$('.album-thumbnails').append('<img data-title="' + captionTitle + '" data-description="' + captionDescription + '" data-image="' + data.data[i].link.replace("http","https") + '" src="//i.imgur.com/' + data.data[i].id + 't.jpg" />');
 
       	}
 
       	$('.album-thumbnails').find("img").first().addClass("active-thumb");
 
-      	$('.large-album').css("background-image", "url(" + data.data[0].link + ")" );
+      	$('.large-album').css("background-image", "url(" + data.data[0].link.replace("http","https") + ")" );
 
-      	$('.shine-expand .large-album').zoom({url: data.data[0].link, on: 'click'});
+      	$('.shine-expand .large-album').zoom({url: data.data[0].link.replace("http","https"), on: 'click'});
 
       	$('.album-captions').html("");
 
@@ -332,7 +255,7 @@ function getImageFromServer(path, id, target){
         if(this.status == 200){
             
             var imageType = getImageType(this.response);
-			
+            			
 			if( imageType == "image/gif" ){
 
 
@@ -340,6 +263,7 @@ function getImageFromServer(path, id, target){
 
 				
 			}else{
+
 				
 				$(target).find('.preview-replace').replaceWith("<div data-url='//i.imgur.com/" + id + ".png' class='preview preview-image' style='background-image:url(//i.imgur.com/" + id + ".png)'></div>");
 				
@@ -647,6 +571,97 @@ function getSoundCloudContent(soundCloudURL, target){
 
 
 
+function getYouTubeTimeStamp(timeStamp){
+    
+    if(timeStamp != undefined){
+                
+        timeStamp = timeStamp.replace("s", "");
+        timeStamp = timeStamp.replace("S", "");
+
+        // if there are minutes
+        if ( timeStamp.toLowerCase().indexOf("m") != -1 ){
+
+            timeStamp = timeStamp.split("m");
+
+            if(timeStamp[1]){
+                timeStamp = parseInt((timeStamp[0] * 60)) + parseInt(timeStamp[1]); 
+            }else{
+                timeStamp = parseInt((timeStamp[0] * 60)); 
+            }
+
+        }
+
+    }else{
+        timeStamp = "0";
+    }
+    
+    return timeStamp;
+    
+}
+
+
+
+
+
+
+
+
+
+
+function getGalleryImage(api, target){
+
+	$.ajax({
+      url: api,
+      type: 'GET',
+      dataType: 'json',
+      success: function(data) { 
+          
+          console.log(data);
+                              
+          if( data.data.images.length > 1 ){
+
+                albumAPI = "https://api.imgur.com/3/album/" + data.data.id + "/images";
+
+                $(target).find('.preview-replace').replaceWith("<div data-album='" + albumAPI + "' class='preview preview-album' style='background-image:url(" + data.data.images[0].link.replace("http","https") + ")'></div>");  
+              
+          }else{
+              
+                getImageFromServer( data.data.images[0].link.replace("http","https") , data.data.images[0].id , target); 
+              
+          }
+          
+      },
+      error: function(request, status, message) { 
+      	console.log(message); 
+      },
+      beforeSend: setHeader
+    });
+
+}
+
+
+// IMGUR GALLERY
+function getEntireImgurGallery(api){
+    
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -749,8 +764,23 @@ function createPreviews(theThings){
 
 			}else if( url.toLowerCase().indexOf("/gallery/") != -1 ){
 
-				// we got a gallery image
-				$(theThings[i]).addClass("nopreview");
+				
+                
+                
+                
+                // this is a gallery
+                galleryID = url.substr(url.toLowerCase().indexOf("/gallery/") + 9);	
+				galleryID = galleryID.split(/[?#]/)[0];
+
+				galleryAPI = "https://api.imgur.com/3/gallery/album/" + galleryID;
+
+				$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
+
+				getGalleryImage(galleryAPI, ".id-" + $(theThings[i]).attr("data-fullname"));
+                
+                
+                
+                
 				
 
 			}else if( url.toLowerCase().indexOf(".gifv") != -1 ){
@@ -832,6 +862,24 @@ function createPreviews(theThings){
 			$(theThings[i]).find('.entry').append("<div data-url='" + url + "' class='preview preview-image' style='background-image:url(" + url + ")'></div>");
 
 		}
+        
+        
+        
+        
+        
+        
+        
+        
+        // REDDIT UPLOADS
+        else if( url.toLowerCase().indexOf("reddituploads.com") != -1){
+			
+			$(theThings[i]).find('.entry').append("<div data-url='" + url + "' class='preview preview-image' style='background-image:url(" + url + ")'></div>");
+
+		}
+        
+        
+        
+        
 
 
 
@@ -867,15 +915,21 @@ function createPreviews(theThings){
                 vidID = decodeURIComponent(vidID);
                 vidID = getUrlVars(vidID)["v"];
                 
-                $(theThings[i]).find('.entry').append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent'></div>");
+                timeStamp = getUrlVars(url)["t"];
+                timeStamp = getYouTubeTimeStamp(timeStamp);
+                                
+                $(theThings[i]).find('.entry').append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp + "'></div>");
 
                                 
             }
             else{
             
                 vidID = getUrlVars(url)["v"];
-    
-                $(theThings[i]).find('.entry').append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent'></div>");
+                
+                timeStamp = getUrlVars(url)["t"];
+                timeStamp = getYouTubeTimeStamp(timeStamp);
+                    
+                $(theThings[i]).find('.entry').append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp + "'></div>");
                                 
             }
 
@@ -892,10 +946,15 @@ function createPreviews(theThings){
 
 		//YOUTUBE SHARE
 		else if( url.toLowerCase().indexOf("youtu.be") != -1 ){
-
+            
+            
 			vidID = url.substr(url.toLowerCase().indexOf("youtu.be/") + 9);
-
-            $(theThings[i]).find('.entry').append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent'></div>");
+            vidID = vidID.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
+            
+            timeStamp = getUrlVars(url)["t"];
+            timeStamp = getYouTubeTimeStamp(timeStamp);
+            
+            $(theThings[i]).find('.entry').append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp + "'></div>");
 			
 
 		}
@@ -1171,6 +1230,7 @@ function resetInterfaces(){
 	$('.shine-grid .shine-expand .side-comments').html("");
 	$('html').removeClass("show-settings");
 	$('html').removeClass("shine-hide-children");
+    $('.album-captions').html("");
 
 }
 
@@ -1258,6 +1318,19 @@ function checkSideComments(){
 
 		}
 
+        
+        
+        // this is reddit uploads
+		else if( url.toLowerCase().indexOf("reddituploads.com") != -1){
+
+			$(theSideCommentLinks[i]).attr("data-image", url);
+
+			$(theSideCommentLinks[i]).addClass("shine-comment comment-image");
+
+		}
+        
+        
+        
 		// this is any other photo
 		else if( url.toLowerCase().indexOf(".png") != -1 || url.toLowerCase().indexOf(".jpg") != -1 || url.toLowerCase().indexOf(".jpeg") != -1 || url.toLowerCase().indexOf(".tif") != -1 || url.toLowerCase().indexOf(".tiff") != -1){
 
@@ -1284,8 +1357,11 @@ function checkSideComments(){
                 vidID = getUrlVars(url)["v"];
                                 
             }
+            
+            timeStamp = getUrlVars(url)["t"];
+            timeStamp = getYouTubeTimeStamp(timeStamp);
 
-			$(theSideCommentLinks[i]).attr("data-video", "//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent");
+			$(theSideCommentLinks[i]).attr("data-video", "//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp);
 
 			$(theSideCommentLinks[i]).addClass("shine-comment comment-youtube");
 
@@ -1296,8 +1372,11 @@ function checkSideComments(){
 		else if( url.toLowerCase().indexOf("youtu.be") != -1 ){
 
 			vidID = url.substr(url.toLowerCase().indexOf("youtu.be/") + 9);
+            
+            timeStamp = getUrlVars(url)["t"];
+            timeStamp = getYouTubeTimeStamp(timeStamp);
 
-            $(theSideCommentLinks[i]).attr("data-video", "//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent");
+            $(theSideCommentLinks[i]).attr("data-video", "//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp);
 
 			$(theSideCommentLinks[i]).addClass("shine-comment comment-youtube");
 
@@ -1698,15 +1777,15 @@ function getCommentAlbumImages( api ){
             captionDescription = captionDescription.replace('"',"'");
           }
 
-          $('.album-thumbnails').append('<img data-title="' + captionTitle + '" data-description="' + captionDescription + '" data-image="' + data.data[i].link + '" src="//i.imgur.com/' + data.data[i].id + 't.jpg" />');
+          $('.album-thumbnails').append('<img data-title="' + captionTitle + '" data-description="' + captionDescription + '" data-image="' + data.data[i].link.replace("http","https") + '" src="//i.imgur.com/' + data.data[i].id + 't.jpg" />');
 
         }
 
         $('.album-thumbnails').find("img").first().addClass("active-thumb");
 
-        $('.large-album').css("background-image", "url(" + data.data[0].link + ")" );
+        $('.large-album').css("background-image", "url(" + data.data[0].link.replace("http","https") + ")" );
 
-        $('.shine-expand .large-album').zoom({url: data.data[0].link, on: 'click'});
+        $('.shine-expand .large-album').zoom({url: data.data[0].link.replace("http","https"), on: 'click'});
 
         $('.album-captions').html("");
 

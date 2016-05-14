@@ -44,106 +44,6 @@ if( !$('html').hasClass("shine-analytics-optout") ){
 }
 
 
-/* SHINE BRIGHT STUFF */
-
-function checkBT(){
-
-	if( $('html').hasClass("shine-bt-loaded") ){
-
-		$.ajax({
-			url: 'https://www.madewithgusto.com/SHINE-braintree2.php',
-			success: function(data){
-
-				braintree.setup(data, "dropin", {
-					container: "payment-form",
-					paypal: {
-						singleUse: true,
-						amount: $('#shine-bright-price-picker option:selected').val(),
-						currency: 'USD'
-					}, 
-					onPaymentMethodReceived: function (obj) {
-					    
-						$.ajax({
-							url: "https://www.madewithgusto.com/SHINE-braintree2.php",
-							data: {
-								nonce:obj.nonce,
-                                shine_amount: $('#shine-bright-price-picker option:selected').val(),
-								shine_email: $('#shine_e').val(),
-								shine_password: $('#shine_p').val()
-							},
-							type: 'POST',
-							success: function(accountdata) {
-
-								accountdata = JSON.parse(accountdata);
-
-								if( accountdata.result != "braintreeerror" && accountdata.result != "mysqlerror" ){
-
-									ga('send', 'event', 'PURCHASED' , 'Shine Bright' , window.location.href.replace("https://","") );
-								
-									$('#shine-login-e').val( $('#shine_e').val() );
-									$('#shine-login-p').val( $('#shine_p').val() );
-
-									$('#shine-bright-login').click();
-
-								}else if( accountdata.result == "braintreeerror" ){
-
-									alert('Sorry about this, but there was a problem processing your payment information. Please try a different payment method. If this continues happening please contact us at shine@madewithgusto.com');
-
-								}else if( accountdata.result == "mysqlerror" ){
-
-									alert('Well we were able to process your payment just fine, but it looks like there was a problem conntecting to our databse. Please contact us at shine@madewithgusto.com and we can get your Shine Bright account set up.');
-
-								}else{
-                                    
-                                    alert('Looks like something went wrong when trying to set up your account, please contact us at shine@madewithgusto.com if this continues to happen.')
-                                    
-                                }
-
-							},
-							error: function(request, status, message) {
-								console.log(request);
-								console.log(status);
-								console.log(message);
-							}
-						});
-
-					}
-				});
-
-			}
-		});
-
-	}else{
-
-		setTimeout(checkBT, 1000);
-	}
-
-}
-
-checkBT();
-
-
-
-
-
-
-
-/*
-
-
-if( $('html').hasClass("shinelight") ){
-
-		$('body > .content > .spacer > #siteTable').prepend('<div class="thing link shine-prompt-thing shine-prompt shined"><a class="thumbnail" ></a><div class="entry unvoted"><p class="title"><a class="title" tabindex="1" target="_blank">Get SHINE BRIGHT Today</a> <span class="domain">(<a>it unlocks some awesome features!</a>)</span></p><p class="tagline">Customization // Night Mode // Comment Media // SHINE Settings // New Features First</p><ul class="flat-list buttons"><li class="first"><a class="comments may-blank">Get It Today!</a></li></ul></div></div>');
-
-}
-
-
-*/
-
-
-
-
-
 
 
 
@@ -345,6 +245,55 @@ function getImageType(arrayBuffer){
 
 
 
+
+// gets YOUTUBE TIME STAMP
+function getYouTubeTimeStamp(timeStamp){
+    
+    if(timeStamp != undefined){
+                
+        timeStamp = timeStamp.replace("s", "");
+        timeStamp = timeStamp.replace("S", "");
+
+        // if there are minutes
+        if ( timeStamp.toLowerCase().indexOf("m") != -1 ){
+
+            timeStamp = timeStamp.split("m");
+
+            if(timeStamp[1]){
+                timeStamp = parseInt((timeStamp[0] * 60)) + parseInt(timeStamp[1]); 
+            }else{
+                timeStamp = parseInt((timeStamp[0] * 60)); 
+            }
+
+        }
+
+    }else{
+        timeStamp = "0";
+    }
+    
+    return timeStamp;
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // these are all our actions / click events
 function resetInterfaces(){
 
@@ -468,6 +417,18 @@ function checkSideComments(){
 			getCommentGfyCatURL(url, ".gfy-comment-" + i);
 
 		}
+        
+        
+        // this is for reddituploads.com
+        else if( url.toLowerCase().indexOf("reddituploads.com") != -1 ){
+
+			$(theSideCommentLinks[i]).attr("data-image", url);
+
+			$(theSideCommentLinks[i]).addClass("shine-comment comment-image");
+
+		}
+        
+        
 
 		// this is any other photo
 		else if( url.toLowerCase().indexOf(".png") != -1 || url.toLowerCase().indexOf(".jpg") != -1 || url.toLowerCase().indexOf(".jpeg") != -1 || url.toLowerCase().indexOf(".tif") != -1 || url.toLowerCase().indexOf(".tiff") != -1){
@@ -495,8 +456,11 @@ function checkSideComments(){
                 vidID = getUrlVars(url)["v"];
                                 
             }
+            
+            timeStamp = getUrlVars(url)["t"];
+            timeStamp = getYouTubeTimeStamp(timeStamp);
 
-			$(theSideCommentLinks[i]).attr("data-video", "//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent");
+			$(theSideCommentLinks[i]).attr("data-video", "//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp);
 
 			$(theSideCommentLinks[i]).addClass("shine-comment comment-youtube");
 
@@ -507,8 +471,11 @@ function checkSideComments(){
 		else if( url.toLowerCase().indexOf("youtu.be") != -1 ){
 
 			vidID = url.substr(url.toLowerCase().indexOf("youtu.be/") + 9);
+            
+            timeStamp = getUrlVars(url)["t"];
+            timeStamp = getYouTubeTimeStamp(timeStamp);
 
-            $(theSideCommentLinks[i]).attr("data-video", "//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent");
+            $(theSideCommentLinks[i]).attr("data-video", "//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp);
 
 			$(theSideCommentLinks[i]).addClass("shine-comment comment-youtube");
 
@@ -874,6 +841,28 @@ $('body').on('click','div.content div#siteTable.linklisting > .thing:not(.shine-
 
 
 
+        
+        // REDDIT UPLOADS
+		else if( url.toLowerCase().indexOf("reddituploads.com") != -1){
+
+			if( !$('html').hasClass("shine-analytics-optout") ){
+
+				ga('send', 'event', 'IMAGE' , url , window.location.href.replace("https://","") );
+			
+			}
+			
+			$(theExpand).find('.large-area').html('<div class="large-image" style="background-image:url(' + url + ');"></div>');
+
+			$(theExpand).find('.large-image').zoom({url: url, on: 'click'});
+
+			$(theExpand).attr("data-original-type", "image");
+			$(theExpand).attr("data-original-data", url);
+
+		}
+        
+        
+        
+        
 
 		// ANY OTHER PICTURE
 		else if( url.toLowerCase().indexOf(".png") != -1 || url.toLowerCase().indexOf(".jpg") != -1 || url.toLowerCase().indexOf(".jpeg") != -1 || url.toLowerCase().indexOf(".tif") != -1 || url.toLowerCase().indexOf(".tiff") != -1){
@@ -951,11 +940,14 @@ $('body').on('click','div.content div#siteTable.linklisting > .thing:not(.shine-
                 vidID = getUrlVars(url)["v"];
                                 
             }
+            
+            timeStamp = getUrlVars(url)["t"];
+            timeStamp = getYouTubeTimeStamp(timeStamp);
 
-            $(theExpand).find(".large-area").html('<div class="large-youtube"><iframe frameborder="0" allowfullscreen src="//www.youtube.com/embed/' + vidID + '?rel=0&autoplay=1&vq=hd1080&wmode=transparent" /></div>');
+            $(theExpand).find(".large-area").html('<div class="large-youtube"><iframe frameborder="0" allowfullscreen src="//www.youtube.com/embed/' + vidID + '?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=' + timeStamp + '" /></div>');
 
             $(theExpand).attr("data-original-type", "youtube");
-			$(theExpand).attr("data-original-data", '//www.youtube.com/embed/' + vidID + '?rel=0&autoplay=1&vq=hd1080&wmode=transparent');
+			$(theExpand).attr("data-original-data", '//www.youtube.com/embed/' + vidID + '?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=' + timeStamp);
 
 		}
 
@@ -974,11 +966,14 @@ $('body').on('click','div.content div#siteTable.linklisting > .thing:not(.shine-
 			}
 
 			vidID = url.substr(url.toLowerCase().indexOf("youtu.be/") + 9);
+            
+            timeStamp = getUrlVars(url)["t"];
+            timeStamp = getYouTubeTimeStamp(timeStamp);
 
-			$(theExpand).find(".large-area").html('<div class="large-youtube"><iframe frameborder="0" allowfullscreen src="//www.youtube.com/embed/' + vidID + '?rel=0&autoplay=1&vq=hd1080&wmode=transparent" /></div>');
+			$(theExpand).find(".large-area").html('<div class="large-youtube"><iframe frameborder="0" allowfullscreen src="//www.youtube.com/embed/' + vidID + '?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=' + timeStamp + '" /></div>');
 
 			$(theExpand).attr("data-original-type", "youtube");
-			$(theExpand).attr("data-original-data", '//www.youtube.com/embed/' + vidID + '?rel=0&autoplay=1&vq=hd1080&wmode=transparent');
+			$(theExpand).attr("data-original-data", '//www.youtube.com/embed/' + vidID + '?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=' + timeStamp);
 			
 
 		}
@@ -1236,9 +1231,9 @@ $('body').on('click','div.content div#siteTable .thing ul.flat-list', function(e
 
 });
 
-$('body').on('click','div.content div#siteTable .thing form.hide-button a', function(e){
-
-	$('#expand-' + $(this).parents('.thing').data("fullname") ).remove();
+$('body').on('click','div#siteTable .thing form.hide-button a', function(e){
+    
+    $('#expand-' + $(this).parents('.thing').data("fullname") ).remove();
 
 });
 
