@@ -707,15 +707,6 @@ function SHINE(){
     if( currentSettings.account.status == "shinebright" ){
         
         $('body').append(''+
-            '<div class="shine-bright-panel">'+
-                'success!'+
-                '<a id="bright-logout">logout</a>'+
-            '</div>'
-        );
-        
-    }else{
-        
-        $('body').append(''+
              '<div class="shine-bright-panel">'+
                 '<div class="shining-bright">'+
                     '<div id="sunburst"><img src="' + chrome.extension.getURL("sunburst.png") + '" /></div>'+
@@ -725,6 +716,10 @@ function SHINE(){
                 '</div>'+
              '</div>'
         );
+        
+    }else{
+        
+        $('body').append('<div class="shine-bright-panel"></div>');
         
     }
 

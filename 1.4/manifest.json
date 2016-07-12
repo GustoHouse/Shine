@@ -4,7 +4,7 @@
 "name": "SHINE for reddit",
 "short_name": "SHINE",
 "description": "Experience reddit with new modern list and grid view interfaces that focus on bringing the content to you.",
-"version": "1.4",
+"version": "1.4.1",
 
 "icons":{
 	"16":"icon-16.png",
