@@ -121,13 +121,13 @@ function getAlbumImage(api, target){
       url: api,
       type: 'GET',
       dataType: 'json',
-      success: function(data) { 
+      success: function(data) {
 
       	$(target).find('.preview-replace, .preview-album').replaceWith("<div data-album='" + api + "' class='preview preview-album' style='background-image:url(" + data.data[0].link.replace("http","https") + ")'></div>");
 
       },
-      error: function(request, status, message) { 
-      	console.log(message); 
+      error: function(request, status, message) {
+      	console.log(message);
       },
       beforeSend: setHeader
     });
@@ -149,8 +149,8 @@ function getEntireAlbum(api){
       url: api,
       type: 'GET',
       dataType: 'json',
-      success: function(data) { 
-          
+      success: function(data) {
+
         console.log(data);
 
       	for( i = 0; i < data.data.length; i++ ){
@@ -187,7 +187,7 @@ function getEntireAlbum(api){
       		}
 
       		if( data.data[0].description != null ){
-      			$('.caption-text p').html(data.data[0].description);	
+      			$('.caption-text p').html(data.data[0].description);
       		}
 
       	}
@@ -195,8 +195,8 @@ function getEntireAlbum(api){
 		$('html').addClass("expanding expand-albums");
 
       },
-      error: function(request, status, message) { 
-      	console.log(message); 
+      error: function(request, status, message) {
+      	console.log(message);
       },
       beforeSend: setHeader
     });
@@ -212,26 +212,26 @@ function getEntireAlbum(api){
 
 
 
-// this gets our vimeo thumbnail 
+// this gets our vimeo thumbnail
 function getVimeoThumbnail(vidID, target){
-	
+
 	$.ajax({
       url: '//vimeo.com/api/v2/video/' + vidID + '.json',
       type: 'GET',
       dataType: 'jsonp',
-      success: function(data) { 
-        
+      success: function(data) {
+
         var vimeoThumb = data[0].thumbnail_large;
 
 		    $(target).find('.preview-replace').replaceWith("<div class='preview preview-vimeo' data-url='//player.vimeo.com/video/" + vidID + "?autoplay=1' style='background-image:url(" + vimeoThumb + ")' ></div>");
-          
+
       },
-      error: function(request, status, message) { 
-      	console.log(message); 
+      error: function(request, status, message) {
+      	console.log(message);
       },
       beforeSend: setHeader
     });
-    
+
 }
 
 
@@ -251,24 +251,24 @@ function getImageFromServer(path, id, target){
     xhr.open("GET",path,true);
     xhr.responseType = "arraybuffer";
     xhr.onload = function(e){
-        
+
         if(this.status == 200){
-            
+
             var imageType = getImageType(this.response);
-            			
+
 			if( imageType == "image/gif" ){
 
 
 				$(target).find('.preview-replace').replaceWith("<div data-video='//i.imgur.com/" + id + ".mp4' class='preview preview-gifv' style='background-image:url(//i.imgur.com/" + id + "h.jpg)'></div>");
 
-				
+
 			}else{
 
-				
+
 				$(target).find('.preview-replace').replaceWith("<div data-url='//i.imgur.com/" + id + ".png' class='preview preview-image' style='background-image:url(//i.imgur.com/" + id + ".png)'></div>");
-				
-			}  
-		      			
+
+			}
+
 		}
         else{
             console.log("Problem retrieving image " + JSON.stringify(e))
@@ -283,25 +283,25 @@ function getCommentImageFromServer(path, id, target){
     xhr.open("GET",path,true);
     xhr.responseType = "arraybuffer";
     xhr.onload = function(e){
-        
+
         if(this.status == 200){
-            
+
             var imageType = getImageType(this.response);
-			
+
 			if( imageType == "image/gif" ){
 
 				$(target).addClass("shine-comment comment-html5");
 
 				$(target).attr("data-video", "//i.imgur.com/" + id + ".mp4");
-				
+
 			}else{
 
 				$(target).addClass("shine-comment comment-image");
 
 				$(target).attr("data-image", "//i.imgur.com/" + id + ".png");
-				
-			}  
-		      			
+
+			}
+
 		}
         else{
             console.log("Problem retrieving image " + JSON.stringify(e))
@@ -354,27 +354,27 @@ function getImageType(arrayBuffer){
 
 // this converts a regular old gif into a gfycat image
 function convertGiftoGfy(target, url){
-	
+
 	$.ajax({
       url: '//upload.gfycat.com/transcode?fetchUrl=' + url,
       type: 'GET',
       dataType: 'json',
-      success: function(data) { 
-	     
+      success: function(data) {
+
 	     gfyID = data.gfyname;
-	     
+
 	     if( data.gfyname != undefined ){
 
 	     	$(target).find('.preview-replace').replaceWith("<div data-url='" + gfyID + "' class='preview preview-gfycat' style='background-image:url(//thumbs.gfycat.com/" + gfyID + "-poster.jpg)'></div>");
-	     
+
 	     }
-	      
+
 	  },
-      error: function(request, status, message) { 
-      	console.log(message); 
+      error: function(request, status, message) {
+      	console.log(message);
       }
-    });		
-	
+    });
+
 }
 
 function getCommentGfyCatURL(url, target){
@@ -383,23 +383,23 @@ function getCommentGfyCatURL(url, target){
       url: '//upload.gfycat.com/transcode?fetchUrl=' + url,
       type: 'GET',
       dataType: 'json',
-      success: function(data) { 
-	     
+      success: function(data) {
+
 	     gfyID = data.gfyname;
-	     
+
 	     if( data.gfyname != undefined ){
 
 	     	$(target).attr("data-video", gfyID );
 
 	     	$(target).addClass("shine-comment comment-gfycat");
-	     
+
 	     }
-	      
+
 	  },
-      error: function(request, status, message) { 
-      	console.log(message); 
+      error: function(request, status, message) {
+      	console.log(message);
       }
-    });	
+    });
 
 }
 
@@ -422,7 +422,7 @@ function getRedditText(url, content, target){
 		url:url,
 		type:'GET',
 		success: function(data){
-			
+
 			if( $(data).find(content).html() != undefined ){
 
 				$(target).find('.preview-replace').replaceWith("<div class='preview preview-text'>" + $(data).find(content).html() + "</div>");
@@ -435,7 +435,7 @@ function getRedditText(url, content, target){
 				$(target).addClass("nopreview");
 
 			}
-		
+
 		}
 	});
 
@@ -461,7 +461,7 @@ function getWikiContent(articleTitle, target){
       url: '//en.wikipedia.org/w/api.php?action=parse&format=json&page=' + articleTitle,
       type: 'GET',
       dataType: 'jsonp',
-      success: function(data) { 
+      success: function(data) {
 
       	$(target).find('.preview-replace').append("<div class='wiki-content' style='display:none;'></div>");
 
@@ -484,7 +484,7 @@ function getWikiContent(articleTitle, target){
       			$(target).find('.preview-replace').remove();
       			$(target).addClass("nopreview");
 
-      		} 
+      		}
 
       	}
 
@@ -492,8 +492,8 @@ function getWikiContent(articleTitle, target){
       	$(target).addClass("nopreview");
 
       },
-      error: function(request, status, message) { 
-      	console.log(message); 
+      error: function(request, status, message) {
+      	console.log(message);
       },
       beforeSend: setHeader
     });
@@ -516,39 +516,39 @@ function getSoundCloudContent(soundCloudURL, target){
       url: '//api.soundcloud.com/resolve.json?url=' + soundCloudURL + '&client_id=343c40e7fa565f9d2b89820a05bb3a8f',
       type: 'GET',
       dataType: 'jsonp',
-      success: function(data) { 
-        
-          embedID = "";  
-        
+      success: function(data) {
+
+          embedID = "";
+
           $.each(data, function(index, element) {
-                
+
             if(index == "id"){
-                    
+
                     embedID = element;
-            
+
                 }
-                
-            });          
-          
+
+            });
+
             if(soundCloudURL.toLowerCase().indexOf("in=") != -1){
-                      
+
             	$(target).find('.preview-replace').replaceWith("<div class='preview preview-soundcloud'><iframe scrolling='no' frameborder='no' src='https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/" + embedID + "&amp;auto_play=false&amp;hide_related=false&amp;visual=true'></iframe></div>");
-                                
+
             }
             else if(soundCloudURL.toLowerCase().indexOf("sets") != -1){
 
             	$(target).find('.preview-replace').replaceWith("<div class='preview preview-soundcloud'><iframe scrolling='no' frameborder='no' src='https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/" + embedID +  "&amp;auto_play=false&amp;hide_related=false&amp;visual=true'></iframe></div>");
-                                
+
             }
-            else{  
+            else{
 
             	$(target).find('.preview-replace').replaceWith("<div class='preview preview-soundcloud'><iframe scrolling='no' frameborder='no' src='https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/" + embedID + "&amp;auto_play=false&amp;hide_related=false&amp;visual=true'></iframe></div>");
-                
-            }                                                                                                       
+
+            }
 
      },
-     error: function(request, status, message) { 
-      	console.log(message); 
+     error: function(request, status, message) {
+      	console.log(message);
       },
       beforeSend: setHeader
     });
@@ -572,9 +572,9 @@ function getSoundCloudContent(soundCloudURL, target){
 
 
 function getYouTubeTimeStamp(timeStamp){
-    
+
     if(timeStamp != undefined){
-                
+
         timeStamp = timeStamp.replace("s", "");
         timeStamp = timeStamp.replace("S", "");
 
@@ -584,9 +584,9 @@ function getYouTubeTimeStamp(timeStamp){
             timeStamp = timeStamp.split("m");
 
             if(timeStamp[1]){
-                timeStamp = parseInt((timeStamp[0] * 60)) + parseInt(timeStamp[1]); 
+                timeStamp = parseInt((timeStamp[0] * 60)) + parseInt(timeStamp[1]);
             }else{
-                timeStamp = parseInt((timeStamp[0] * 60)); 
+                timeStamp = parseInt((timeStamp[0] * 60));
             }
 
         }
@@ -594,9 +594,9 @@ function getYouTubeTimeStamp(timeStamp){
     }else{
         timeStamp = "0";
     }
-    
+
     return timeStamp;
-    
+
 }
 
 
@@ -614,25 +614,25 @@ function getGalleryImage(api, target){
       url: api,
       type: 'GET',
       dataType: 'json',
-      success: function(data) { 
-          
+      success: function(data) {
+
           console.log(data);
-                              
+
           if( data.data.images.length > 1 ){
 
                 albumAPI = "https://api.imgur.com/3/album/" + data.data.id + "/images";
 
-                $(target).find('.preview-replace').replaceWith("<div data-album='" + albumAPI + "' class='preview preview-album' style='background-image:url(" + data.data.images[0].link.replace("http","https") + ")'></div>");  
-              
+                $(target).find('.preview-replace').replaceWith("<div data-album='" + albumAPI + "' class='preview preview-album' style='background-image:url(" + data.data.images[0].link.replace("http","https") + ")'></div>");
+
           }else{
-              
-                getImageFromServer( data.data.images[0].link.replace("http","https") , data.data.images[0].id , target); 
-              
+
+                getImageFromServer( data.data.images[0].link.replace("http","https") , data.data.images[0].id , target);
+
           }
-          
+
       },
-      error: function(request, status, message) { 
-      	console.log(message); 
+      error: function(request, status, message) {
+      	console.log(message);
       },
       beforeSend: setHeader
     });
@@ -712,8 +712,11 @@ function createPreviews(theThings){
 		extension = url.substr(url.lastIndexOf('.')+1);
 
 		// global changes to every card
+    if( $(theThings[i]).find('ul.flat-list a.comments').html() != undefined ){
 
-		$(theThings[i]).find('ul.flat-list a.comments').html( $(theThings[i]).find('ul.flat-list a.comments').html().replace(/\D/g,'') );
+		    $(theThings[i]).find('ul.flat-list a.comments').html( $(theThings[i]).find('ul.flat-list a.comments').html().replace(/\D/g,'') );
+
+    }
 
 		$(theThings[i]).find('ul.flat-list a.comments').attr("target","_blank");
 		$(theThings[i]).find('a.title').attr("target","_blank");
@@ -738,7 +741,7 @@ function createPreviews(theThings){
 			if( url.toLowerCase().indexOf("/a/") != -1){
 
 				// we got an album
-				albumID = url.substr(url.toLowerCase().indexOf("/a/") + 3);	
+				albumID = url.substr(url.toLowerCase().indexOf("/a/") + 3);
 				albumID = albumID.split(/[?#]/)[0];
 
 				albumAPI = "https://api.imgur.com/3/album/" + albumID + "/images";
@@ -751,16 +754,16 @@ function createPreviews(theThings){
 
 				// we got a subreddit image
 				$(theThings[i]).addClass("nopreview");
-				
+
 
 			}else if( url.toLowerCase().indexOf("/gallery/") != -1 ){
 
-				
-                
-                
-                
+
+
+
+
                 // this is a gallery
-                galleryID = url.substr(url.toLowerCase().indexOf("/gallery/") + 9);	
+                galleryID = url.substr(url.toLowerCase().indexOf("/gallery/") + 9);
 				galleryID = galleryID.split(/[?#]/)[0];
 
 				galleryAPI = "https://api.imgur.com/3/gallery/album/" + galleryID;
@@ -768,11 +771,11 @@ function createPreviews(theThings){
 				$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
 
 				getGalleryImage(galleryAPI, ".id-" + $(theThings[i]).attr("data-fullname"));
-                
-                
-                
-                
-				
+
+
+
+
+
 
 			}else if( url.toLowerCase().indexOf(".gifv") != -1 ){
 
@@ -798,14 +801,14 @@ function createPreviews(theThings){
 				IMGURID = url.substr(url.toLowerCase().indexOf("imgur.com/") + 10);
 
 				if( IMGURID.indexOf(".tiff") != -1 || IMGURID.indexOf(".jpeg") != -1 ){
-					
+
 					IMGURID = IMGURID.substring(0, IMGURID.length - 5);
-					
+
 				}
 				else if( IMGURID.indexOf(".png") != -1 || IMGURID.indexOf(".jpg") != -1 || IMGURID.indexOf(".tif") != -1){
-				
+
 					IMGURID = IMGURID.substring(0, IMGURID.length - 4);
-				
+
 				}
 
 				$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
@@ -827,14 +830,14 @@ function createPreviews(theThings){
 		// REGULAR OLD GIFS CONVERTED TO GFYCAT
 		else if( url.toLowerCase().indexOf(".gif") != -1 && url.toLowerCase().indexOf(".gifv") == -1 && url.toLowerCase().indexOf("/r/") == -1 ){
 
-			
+
 			url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
 
 			$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
 
 			convertGiftoGfy( ".id-" + $(theThings[i]).attr("data-fullname"), url );
-			
-			
+
+
 		}
 
 
@@ -847,30 +850,30 @@ function createPreviews(theThings){
 		else if( url.toLowerCase().indexOf(".png") != -1 || url.toLowerCase().indexOf(".jpg") != -1 || url.toLowerCase().indexOf(".jpeg") != -1 || url.toLowerCase().indexOf(".tif") != -1 || url.toLowerCase().indexOf(".tiff") != -1){
 
 			// this is any other image
-			
+
 			url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
-			
+
 			$(theThings[i]).find('.entry').append("<div data-url='" + url + "' class='preview preview-image' style='background-image:url(" + url + ")'></div>");
 
 		}
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
         // REDDIT UPLOADS
         else if( url.toLowerCase().indexOf("reddituploads.com") != -1){
-			
+
 			$(theThings[i]).find('.entry').append("<div data-url='" + url + "' class='preview preview-image' style='background-image:url(" + url + ")'></div>");
 
 		}
-        
-        
-        
-        
+
+
+
+
 
 
 
@@ -879,7 +882,7 @@ function createPreviews(theThings){
 
 		// LIVEMEME
 		else if( url.toLowerCase().indexOf("livememe.com") != -1){
-			
+
 			url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
 
 			liveMemeURL = url;
@@ -901,27 +904,27 @@ function createPreviews(theThings){
 		else if( url.toLowerCase().indexOf("youtube.com") != -1 && url.toLowerCase().indexOf("/r/youtube") == -1 ){
 
             if( url.toLowerCase().indexOf("attribution") != -1){
-                
+
                 vidID = getUrlVars(url)["u"];
                 vidID = decodeURIComponent(vidID);
                 vidID = getUrlVars(vidID)["v"];
-                
+
                 timeStamp = getUrlVars(url)["t"];
                 timeStamp = getYouTubeTimeStamp(timeStamp);
-                                
+
                 $(theThings[i]).find('.entry').append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp + "'></div>");
 
-                                
+
             }
             else{
-            
+
                 vidID = getUrlVars(url)["v"];
-                
+
                 timeStamp = getUrlVars(url)["t"];
                 timeStamp = getYouTubeTimeStamp(timeStamp);
-                    
+
                 $(theThings[i]).find('.entry').append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp + "'></div>");
-                                
+
             }
 
 		}
@@ -937,16 +940,16 @@ function createPreviews(theThings){
 
 		//YOUTUBE SHARE
 		else if( url.toLowerCase().indexOf("youtu.be") != -1 ){
-            
-            
+
+
 			vidID = url.substr(url.toLowerCase().indexOf("youtu.be/") + 9);
             vidID = vidID.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
-            
+
             timeStamp = getUrlVars(url)["t"];
             timeStamp = getYouTubeTimeStamp(timeStamp);
-            
+
             $(theThings[i]).find('.entry').append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp + "'></div>");
-			
+
 
 		}
 
@@ -960,13 +963,13 @@ function createPreviews(theThings){
 
 		// VIMEO
 		else if( url.toLowerCase().indexOf("vimeo.com") != -1 && url.toLowerCase().indexOf("/r/vimeo") == -1 ){
-			
+
 			url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
 
 			vidID = url.substr(url.toLowerCase().indexOf("vimeo.com/") + 10);
 
 			$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
-            
+
             getVimeoThumbnail(vidID,  ".id-" + $(theThings[i]).attr("data-fullname"));
 
 		}
@@ -980,13 +983,13 @@ function createPreviews(theThings){
 
 		//SELF POST POST
 		else if( url.toLowerCase().indexOf("/r/") != -1 && url.toLowerCase().indexOf("comments") != -1 && url.toLowerCase().indexOf("reddit.com") == -1 && url.toLowerCase().indexOf("np.reddit") == -1){
-			
+
 			url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
 
 			$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
-            
+
 			getRedditText(url, ".sitetable.linklisting .usertext-body .md", ".id-" + $(theThings[i]).attr("data-fullname") );
-            
+
 		}
 
 
@@ -1005,7 +1008,7 @@ function createPreviews(theThings){
 	        $(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
 
 	        getRedditText(url, ".usertext.border .md", ".id-" + $(theThings[i]).attr("data-fullname") );
-            
+
 		}
 
 
@@ -1017,7 +1020,7 @@ function createPreviews(theThings){
 
 		//WIKIPEDIA
 		else if( url.toLowerCase().indexOf("wikipedia.com") != -1 || url.toLowerCase().indexOf("wikipedia.org") != -1 ){
-			
+
 			url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
 
 			wikiTitle = url.substr(url.search(/wikipedia/i) + 19);
@@ -1036,13 +1039,13 @@ function createPreviews(theThings){
 
 		//SOUNDCLOUD
         else if( url.toLowerCase().indexOf("soundcloud.com") != -1 ){
-	        
+
 	        url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
-         
+
             $(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
-            
+
             getSoundCloudContent( url,  ".id-" + $(theThings[i]).attr("data-fullname") );
-            
+
         }
 
 
@@ -1054,19 +1057,19 @@ function createPreviews(theThings){
 
 		//GFYCAT
         else if( url.toLowerCase().indexOf("gfycat.com") != -1 ){
-	        
+
 	        url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
-	        
+
 	        gfyID = url.substr(url.toLowerCase().indexOf("gfycat.com/") + 11);
-	        
+
 	        if( gfyID.indexOf(".webm") != -1 || gfyID.indexOf(".gifv") != -1 ){
 		        gfyID = gfyID.substring(0, gfyID.length - 5);
 	        }else if ( gfyID.indexOf(".ogg") != -1 || gfyID.indexOf(".ogv") != -1 || gfyID.indexOf(".mp4") != -1){
 	        	gfyID = gfyID.substring(0, gfyID.length - 4);
 	        }
-            
+
 			       $(theThings[i]).find('.entry').append("<div style='background-image:url(//thumbs.gfycat.com/" + gfyID + "-poster.jpg)' class='preview preview-gfycat' data-url='" + gfyID + "'></div>");
-	        
+
         }
 
 
@@ -1133,7 +1136,7 @@ if( $('body').hasClass('res') ){
 		setTimeout("jQuery('#siteTable > .sitetable.linklisting .thing').first().unwrap()", 1);
 
 	}, false);
- 
+
 }else{
 
 
@@ -1153,30 +1156,30 @@ if( $('body').hasClass('res') ){
         	$.ajax({
 		      url: subReddit + "?count=25&after=" + lastThing,
 		      cache: false,
-		      success: function(data) { 
+		      success: function(data) {
 
               if( !$('html').hasClass("shine-analytics-optout") ){
 
 		      	     ga('send', 'pageview', { 'page': window.location.href.replace("https://","") , 'title': document.title });
-			     
+
               }
 
 			     window.location.hash = "shiny=" + lastThing;
 
 			     $('body > .content #siteTable').append( $(data).find('#siteTable .thing') );
-			     
+
 			     createPreviews( $('body > .content #siteTable .thing').not(".shined") );
 
 			     loading = false;
-			      
+
 			  },
-		      error: function(request, status, message) { 
-		      	console.log(message); 
+		      error: function(request, status, message) {
+		      	console.log(message);
 		      }
-		    });	
+		    });
 
         }
-        
+
     });
 
 
@@ -1244,7 +1247,7 @@ function checkSideComments(){
 			if( url.toLowerCase().indexOf("/a/") != -1){
 
 				// we got an album
-				albumID = url.substr(url.toLowerCase().indexOf("/a/") + 3);	
+				albumID = url.substr(url.toLowerCase().indexOf("/a/") + 3);
 				albumID = albumID.split(/[?#]/)[0];
 
 				$(theSideCommentLinks[i]).attr("data-album", "https://api.imgur.com/3/album/" + albumID + "/images");
@@ -1252,13 +1255,13 @@ function checkSideComments(){
 				$(theSideCommentLinks[i]).addClass("shine-comment comment-album");
 
 			// we have a gifv
-			}else if( url.toLowerCase().indexOf(".gifv") != -1 ){ 	
+			}else if( url.toLowerCase().indexOf(".gifv") != -1 ){
 
 				// we have a gifv
 				html5 = url.substr(url.toLowerCase().indexOf("imgur.com/") + 10);
 				html5 = html5.substring(0, html5.length - 5);
 
-				$(theSideCommentLinks[i]).attr("data-video", "//i.imgur.com/" + html5  + ".mp4");				
+				$(theSideCommentLinks[i]).attr("data-video", "//i.imgur.com/" + html5  + ".mp4");
 
 				$(theSideCommentLinks[i]).addClass("shine-comment comment-html5");
 
@@ -1282,14 +1285,14 @@ function checkSideComments(){
 				IMGURID = url.substr(url.toLowerCase().indexOf("imgur.com/") + 10);
 
 				if( IMGURID.indexOf(".tiff") != -1 || IMGURID.indexOf(".jpeg") != -1 ){
-					
+
 					IMGURID = IMGURID.substring(0, IMGURID.length - 5);
-					
+
 				}
 				else if( IMGURID.indexOf(".png") != -1 || IMGURID.indexOf(".jpg") != -1 || IMGURID.indexOf(".tif") != -1){
-				
+
 					IMGURID = IMGURID.substring(0, IMGURID.length - 4);
-				
+
 				}
 
 				$(theSideCommentLinks[i]).addClass("comment-" + i + "-" + IMGURID);
@@ -1309,8 +1312,8 @@ function checkSideComments(){
 
 		}
 
-        
-        
+
+
         // this is reddit uploads
 		else if( url.toLowerCase().indexOf("reddituploads.com") != -1){
 
@@ -1319,9 +1322,9 @@ function checkSideComments(){
 			$(theSideCommentLinks[i]).addClass("shine-comment comment-image");
 
 		}
-        
-        
-        
+
+
+
 		// this is any other photo
 		else if( url.toLowerCase().indexOf(".png") != -1 || url.toLowerCase().indexOf(".jpg") != -1 || url.toLowerCase().indexOf(".jpeg") != -1 || url.toLowerCase().indexOf(".tif") != -1 || url.toLowerCase().indexOf(".tiff") != -1){
 
@@ -1337,18 +1340,18 @@ function checkSideComments(){
 			vidID = "";
 
 			if( url.toLowerCase().indexOf("attribution") != -1){
-                
+
                 vidID = getUrlVars(url)["u"];
                 vidID = decodeURIComponent(vidID);
                 vidID = getUrlVars(vidID)["v"];
-                                
+
             }
             else{
-            
+
                 vidID = getUrlVars(url)["v"];
-                                
+
             }
-            
+
             timeStamp = getUrlVars(url)["t"];
             timeStamp = getYouTubeTimeStamp(timeStamp);
 
@@ -1363,7 +1366,7 @@ function checkSideComments(){
 		else if( url.toLowerCase().indexOf("youtu.be") != -1 ){
 
 			vidID = url.substr(url.toLowerCase().indexOf("youtu.be/") + 9);
-            
+
             timeStamp = getUrlVars(url)["t"];
             timeStamp = getYouTubeTimeStamp(timeStamp);
 
@@ -1377,9 +1380,9 @@ function checkSideComments(){
 		else if( url.toLowerCase().indexOf("gfycat.com") != -1 ){
 
 			url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
-	        
+
 	        gfyID = url.substr(url.toLowerCase().indexOf("gfycat.com/") + 11);
-	        
+
 	        if( gfyID.indexOf(".webm") != -1 || gfyID.indexOf(".gifv") != -1 ){
 		        gfyID = gfyID.substring(0, gfyID.length - 5);
 	        }else if ( gfyID.indexOf(".ogg") != -1 || gfyID.indexOf(".ogv") != -1 || gfyID.indexOf(".mp4") != -1){
@@ -1413,7 +1416,7 @@ function checkSideComments(){
 			$(topLevelComments[i]).find("ul.flat-list").first().append("<li class='inline-child-toggle'><a>hide / show child comments</a></li>");
 
 		}
-		
+
 	}
 
 	// stuff to do to all anchor tags
@@ -1430,7 +1433,7 @@ function checkSideComments(){
 function loadSideComments(target, url){
 
 	$(target).load( url + " div.content", function(){
-        
+
         $(this).find('.expando').children('*').not('.usertext').remove();
         $(this).find('.expando-button').remove();
 
@@ -1597,7 +1600,7 @@ $('body').on('click','.album-thumbnails img', function(){
   		}
 
   		if( $(this).data("description") != "null" ){
-  			$('.caption-text p').html($(this).data("description"));	
+  			$('.caption-text p').html($(this).data("description"));
   		}
 
   	}
@@ -1623,7 +1626,7 @@ $('body').on('click','.show-captions',function(e){
 });
 
 $(document).keydown(function(e) {
-    
+
     if( $('html').hasClass("expand-albums") ){
 
     	theThumbs = $('.album-thumbnails img');
@@ -1656,7 +1659,7 @@ $(document).keydown(function(e) {
 
 	    } else if (code == 38) {
 	        //up pressed
-	        
+
 	        for(i = 0; i < theThumbs.length; i++){
 
 	        	if( $(theThumbs[i]).hasClass("active-thumb") ){
@@ -1695,7 +1698,7 @@ $('body').on('click','.preview-text',function(){
 
 	   ga('send', 'event', 'TEXT' , $(this).parents(".thing").find('a.title').attr("href") , window.location.href.replace("https://","") );
 
-  }   
+  }
 
 	$(this).parents('.thing').addClass("reading");
 
@@ -1751,7 +1754,7 @@ function getCommentAlbumImages( api ){
       url: api,
       type: 'GET',
       dataType: 'json',
-      success: function(data) { 
+      success: function(data) {
 
         clearExpandStuff();
 
@@ -1789,7 +1792,7 @@ function getCommentAlbumImages( api ){
           }
 
           if( data.data[0].description != null ){
-            $('.caption-text p').html(data.data[0].description);  
+            $('.caption-text p').html(data.data[0].description);
           }
 
         }
@@ -1797,8 +1800,8 @@ function getCommentAlbumImages( api ){
     $('html').addClass("expanding expand-albums");
 
       },
-      error: function(request, status, message) { 
-        console.log(message); 
+      error: function(request, status, message) {
+        console.log(message);
       },
       beforeSend: setHeader
     });
@@ -1923,7 +1926,7 @@ function replaceExpand(type,data,button){
   }else{
     $('.shine-comment').removeClass("closecommentmedia");
   }
-  
+
 
 
 
@@ -2018,7 +2021,7 @@ $('html').not('.shinelight').on('click','.comment-album:not(.closecommentmedia)'
 
   }
 
-  replaceExpand("album", $(this).data("album"), $(this) );  
+  replaceExpand("album", $(this).data("album"), $(this) );
 
 	e.preventDefault();
 
@@ -2112,7 +2115,7 @@ $(document).on('keyup keydown', function(e){
 
 
 
-/* SHINE LIGHT STUFF 
+/* SHINE LIGHT STUFF
 
 if( $('html').hasClass("shinelight") ){
 
@@ -2150,19 +2153,19 @@ if( !$('html').hasClass("shine-analytics-optout") ){
 
   $('body').on('click','.arrow.downmod', function(){
 
-  	ga('send', 'event', 'DOWNVOTE' , $(this).parents('.thing').find('a.title').attr("href") , window.location.href.replace("https://","") );	
+  	ga('send', 'event', 'DOWNVOTE' , $(this).parents('.thing').find('a.title').attr("href") , window.location.href.replace("https://","") );
 
   });
 
   $('body').on('click','.list-switch', function(){
 
-  	ga('send', 'event', 'SWITCH' , "LIST VIEW" , window.location.href.replace("https://","") );	
+  	ga('send', 'event', 'SWITCH' , "LIST VIEW" , window.location.href.replace("https://","") );
 
   });
 
   $('body').on('click','.grid-switch', function(){
 
-  	ga('send', 'event', 'SWITCH' , "GRID VIEW" , window.location.href.replace("https://","") );	
+  	ga('send', 'event', 'SWITCH' , "GRID VIEW" , window.location.href.replace("https://","") );
 
   });
 
@@ -2178,7 +2181,7 @@ if( !$('html').hasClass("shine-analytics-optout") ){
 
   $('body').on('click','.shine-submit', function(){
 
-  	ga('send', 'event', 'NAV' , "SUBMIT" , window.location.href.replace("https://","") );	
+  	ga('send', 'event', 'NAV' , "SUBMIT" , window.location.href.replace("https://","") );
 
   });
 
@@ -2204,43 +2207,43 @@ if( !$('html').hasClass("shine-analytics-optout") ){
 
   $('body').on('click','.shine-settings', function(){
 
-  	ga('send', 'event', 'NAV' , "SETTINGS" , window.location.href.replace("https://","") );	
+  	ga('send', 'event', 'NAV' , "SETTINGS" , window.location.href.replace("https://","") );
 
   });
 
   $('body').on('click','.shine-search', function(){
 
-  	ga('send', 'event', 'NAV' , "SEARCH" , window.location.href.replace("https://","") );	
+  	ga('send', 'event', 'NAV' , "SEARCH" , window.location.href.replace("https://","") );
 
   });
 
   $('body').on('click','.shine-bright-nav', function(){
 
-  	ga('send', 'event', 'NAV' , "SHINE BRIGHT" , window.location.href.replace("https://","") );	
+  	ga('send', 'event', 'NAV' , "SHINE BRIGHT" , window.location.href.replace("https://","") );
 
   });
 
   $('body').on('click','#shine-bright-logout', function(){
 
-  	ga('send', 'event', 'SHINE BRIGHT' , "LOGOUT" , window.location.href.replace("https://","") );	
+  	ga('send', 'event', 'SHINE BRIGHT' , "LOGOUT" , window.location.href.replace("https://","") );
 
   });
 
   $('body').on('click','#shine-bright-login', function(){
 
-  	ga('send', 'event', 'SHINE BRIGHT' , "LOGIN" , window.location.href.replace("https://","") );	
+  	ga('send', 'event', 'SHINE BRIGHT' , "LOGIN" , window.location.href.replace("https://","") );
 
   });
 
   $('body').on('click','#shine-remind-me', function(){
 
-  	ga('send', 'event', 'SHINE BRIGHT' , "FORGOT" , window.location.href.replace("https://","") );	
+  	ga('send', 'event', 'SHINE BRIGHT' , "FORGOT" , window.location.href.replace("https://","") );
 
   });
 
   $('body').on('click','.shine-prompt', function(){
 
-  	ga('send', 'event', 'SHINE BRIGHT' , "PROMPT" , window.location.href.replace("https://","") );	
+  	ga('send', 'event', 'SHINE BRIGHT' , "PROMPT" , window.location.href.replace("https://","") );
 
   });
 
