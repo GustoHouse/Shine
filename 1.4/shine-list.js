@@ -82,6 +82,29 @@ function getUrlVars(url) {
     return vars;
 }
 
+
+// this gets the ireddit picture url
+function getireddit(target, url){
+    
+    $(target).find('.large-area').html('<div class="large-image"></div>');
+    $(target).find('.large-area .large-image').load(url + " img.preview", function() {
+        
+        iredditUrl = $(this).find('img.preview').attr("src");
+                
+        $(this).find('img.preview').remove();
+
+        $(this).attr("style", "background-image:url(" + iredditUrl + ");" );
+
+        $(this).zoom({url: iredditUrl, on: 'click'});
+
+        $(this).parents('.shine-expand').attr("data-original-type", "image");
+        $(this).parents('.shine-expand').attr("data-original-data", iredditUrl);
+
+    });
+    
+}
+
+
 // this converts a regular old gif into a gfycat image
 function convertGiftoGfy(target, url){
 	
@@ -498,8 +521,8 @@ function checkSideComments(){
 
 			$(theSideCommentLinks[i]).addClass("shine-comment comment-gfycat");
 
-		}
-
+        }
+        
 		else{
 
 			$(theSideCommentLinks[i]).addClass("shine-comment");
@@ -668,7 +691,7 @@ $('body').on('click','div.content div#siteTable.linklisting > .thing:not(.shine-
 
 		// time to decide what kind of link this is
 		url = $(this).find('a.title').attr("href");
-
+        
 		// IMGUR
 		if( url.toLowerCase().indexOf("imgur.com") != -1 && url.toLowerCase().indexOf("gifsound.com") == -1){
 
@@ -1216,6 +1239,23 @@ $('body').on('click','div.content div#siteTable.linklisting > .thing:not(.shine-
 
 
 
+        
+        //i.redd.it POSTS
+        else if( $(theLink).find('span.domain a').html() == "i.redd.it" ){
+            
+            if( !$('html').hasClass("shine-analytics-optout") ){
+
+				ga('send', 'event', 'IMAGE' , url , window.location.href.replace("https://","") );
+
+			}
+
+			url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
+
+			getireddit( theExpand, url );
+                        
+        }
+        
+        
 
 
 		//REDDIT COMMENT
@@ -1863,7 +1903,7 @@ $(document).on('keyup keydown', function(e){
 
 if( $('body').hasClass('res') ){
 
-	window.addEventListener("neverEndingLoaded", function() {
+	window.addEventListener("neverEndingLoad", function() {
 
 		if( !$('html').hasClass("shine-analytics-optout") ){
 

@@ -344,6 +344,19 @@ function getImageType(arrayBuffer){
 
 
 
+// this gets the ireddit picture url
+function getireddit(url, target){
+    
+    $(target).find('.preview-replace').load(url + " img.preview", function() {
+        
+        iredditUrl = $(this).find('img.preview').attr("src");
+                
+        $(this).replaceWith("<div data-url='" + iredditUrl + "' class='preview preview-image' style='background-image:url(" + iredditUrl + ")'></div>");
+
+    });
+    
+}
+
 
 
 
@@ -974,6 +987,19 @@ function createPreviews(theThings){
 
 		}
 
+        
+        
+        
+        // i.reddit.com uploads
+        else if( $(theThings[i]).find('span.domain a').html() == "i.redd.it" ){
+            
+            url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
+            
+            $(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
+            
+            getireddit( url, ".id-" + $(theThings[i]).attr("data-fullname") );
+            
+        }
 
 
 
@@ -1123,7 +1149,7 @@ createPreviews( $('body > .content #siteTable .thing') );
 
 if( $('body').hasClass('res') ){
 
-	window.addEventListener("neverEndingLoaded", function() {
+	window.addEventListener("neverEndingLoad", function() {
 
         if( !$('html').hasClass("shine-analytics-optout") ){
 
