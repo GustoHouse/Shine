@@ -5,10 +5,38 @@
     box-sizing: border-box;
 }
 
+html{
+    opacity:0 !important;
+    transition:opacity 300ms ease;
+}
+
+html.shine-ready{
+    opacity:1 !important;
+}
+
 body{
     background-color:#f5f5f5 !important;
     padding-top:78px !important;
 }
+
+.organic-listing,
+.trending-subreddits {
+    display: none !important;
+}
+
+.spacer {
+    margin: 0 !important;
+}
+
+html.shine .content,
+html.shine body.with-listing-chooser.listing-chooser-collapsed>.content, 
+html.shine body.with-listing-chooser.listing-chooser-collapsed .footer-parent {
+    margin: 45px;
+    margin-left: 45px;
+    transition:margin 300ms ease;
+}
+
+
 
 /* HEADER CSS */
 
@@ -20,6 +48,11 @@ div#header {
     background: #fff;
     border: 0px;
     box-shadow: 0px 0px 20px rgba(0,0,0,.2);
+    transition:top 300ms ease;
+}
+
+body.hide-header div#header{
+    top:-78px;
 }
 
 table#srList {
