@@ -44,12 +44,16 @@ html.SHINE.shine-list body > div.content div#siteTable.linklisting > .thing{
 	background:#fff;
 	margin: 0px;
     box-sizing: border-box;
-    padding: 10px 60px 10px 130px;
+    padding: 10px 60px 10px 10px;
     border-bottom: 1px solid #ccc;
     position: relative;
     cursor: pointer;
     border-left:5px solid #fff;
     transition:border 300ms ease;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 html.SHINE.shine-list body > div.content div#siteTable.linklisting > .thing.active-thing{
@@ -117,36 +121,16 @@ html.SHINE.shine-list body > div.content div#siteTable > .thing span.rank {
 
 html.SHINE.shine-list body > div.content div#siteTable > .thing a.thumbnail {
     overflow: hidden;
-	position: absolute;
     z-index:2;
-	width: 60px;
-    height: 60px;
-    left: 10px;
-    top: calc(50% - 30px);
-}
-
-html.SHINE.shine-list body > .content div#siteTable > .thing .entry::before{
-	content:'';
-	overflow: hidden;
-	position: absolute;
-    border: 2px solid #D8D8D8;
-    left: 8px;
-    width: 60px;
-    height: 60px;
-    top: calc(50% - 32px);
-    background:transparent;
-    z-index:1;
-}
-
-html.SHINE.shine-list body > .content div#siteTable > .thing .entry::before {
-    left: 8px;
-    width: 60px;
-    height: 60px;
-    top: calc(50% - 32px);
-}
-
-html.SHINE.shine-list body > .content div#siteTable > .thing .entry.RES-keyNav-activeElement::before{
-    border-color:rgb(255,105,0) !important;
+	width: 70px;
+    min-width:70px;
+    height: 50px;
+    margin: 0px;
+    order:1;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 html.SHINE.shine-list body > .content div#siteTable > .thing .entry.RES-keyNav-activeElement a.title{
@@ -172,6 +156,7 @@ html.SHINE.shine-list body > div.content div#siteTable > .thing .entry {
     margin: 0px;
     padding: 0px 0px 0px 5px;
     display: block;
+    order:3;
 }
 
 html.SHINE.shine-list body > .content #siteTable > .thing .arrow.up,
@@ -226,17 +211,20 @@ html.SHINE.shine-list body > .content #siteTable > .thing .midcol {
     display: flex;
     flex-direction: column;
     margin: 0px;
-    width: 100px;
+    width: 70px;
+    min-width:70px;
+    max-width:70px;
     float: left;
     justify-content: space-between;
     text-align: center;
     align-items: center;
-    position: absolute;
-    top: 0px;
-    left: 50px;
-    height: 100%;
-    padding: 10px 0;
+    padding: 0;
     box-sizing: border-box;
+    order:2;
+}
+
+html.SHINE.shine-list body > .content #siteTable > .thing .midcol .score{
+    margin:3px 0;
 }
 
 html.SHINE.shine-list body > .content .nav-buttons{

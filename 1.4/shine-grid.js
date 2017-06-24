@@ -721,7 +721,7 @@ function createPreviews(theThings){
 
 		// setting up variables
 
-		url = $(theThings[i]).find('a.title').attr("href").replace(".httml","");
+		url = $(theThings[i]).find('a.title').attr("data-href-url").replace(".httml","");
 		extension = url.substr(url.lastIndexOf('.')+1);
 
 		// global changes to every card

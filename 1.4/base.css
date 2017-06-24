@@ -1282,7 +1282,15 @@ html.SHINE .settings-panel .panel.panel-active{
     display: block;
     font-size: 14px;
     font-weight: 600;
-    margin: 0px 0px 10px;
+    margin: 0px 0px 5px;
+}
+
+span.settings-small-print {
+    font-size: 12px;
+    font-weight: 100;
+    margin-bottom: 10px;
+    float: left;
+    width: 100%;
 }
 
 .settings-panel select{
