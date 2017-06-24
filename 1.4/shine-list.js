@@ -690,7 +690,7 @@ $('body').on('click','div.content div#siteTable.linklisting > .thing:not(.shine-
 		theExpand = $("#expand-" + $(this).data("fullname"));
 
 		// time to decide what kind of link this is
-		url = $(this).find('a.title').attr("href");
+		url = $(this).find('a.title').attr("data-href-url");
         
 		// IMGUR
 		if( url.toLowerCase().indexOf("imgur.com") != -1 && url.toLowerCase().indexOf("gifsound.com") == -1){

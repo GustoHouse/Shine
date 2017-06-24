@@ -216,6 +216,7 @@ function SHINE(){
 				'<div class="settings-halves">'+
 					'<div class="settings-column-half">'+
 						'<label for="settings-default-view">Default View</label>'+
+						'<span class="settings-small-print">The default view for most pages.</span>'+
 						'<select name="settings-default-view" id="settings-default-view">'+
 							'<option value="list">List View</option>'+
 							'<option value="grid">Grid View</option>'+
@@ -223,6 +224,7 @@ function SHINE(){
 					'</div>'+
 					'<div class="settings-column-half">'+
 						'<label for="settings-night-mode">Night Mode</label>'+
+						'<span class="settings-small-print">If you have RES, turn it on there too.</span>'+
 						'<select name="settings-night-mode" id="settings-night-mode">'+
 							'<option value="off">Off</option>'+
 							'<option value="on">On</option>'+
@@ -232,6 +234,7 @@ function SHINE(){
 				'<div class="settings-halves">'+
 					'<div class="settings-column-half">'+					
 						'<label for="settings-shortcuts-bar">Shortcuts Bar</label>'+
+						'<span class="settings-small-print">Hide or show the shortcuts bar at the top.</span>'+
 						'<select name="settings-shortcuts-bar" id="settings-shortcuts-bar">'+
 							'<option value="show">Show</option>'+
 							'<option value="hide">Hide</option>'+
@@ -239,6 +242,7 @@ function SHINE(){
 					'</div>'+
 					'<div class="settings-column-half">'+					
 						'<label for="settings-analytics">Google Analytics Tracking</label>'+
+						'<span class="settings-small-print">Turn on or off Google Analytics.</span>'+
 						'<select name="settings-analytics" id="settings-analytics">'+
 							'<option value="shine-analytics-optin">Opt In</option>'+
 							'<option value="shine-analytics-optout">Opt Out</option>'+
@@ -1117,7 +1121,7 @@ $('body').on('change','#settings-list-split', function(){
 
 $('body').on('click','.grid-switch', function(){
 
-	if( $('body').hasClass("front-page") ){
+	if( window.location.href.indexOf("/r/") == -1 && window.location.href.indexOf("/m/") == -1 ){
 
 		currentSettings.global.layout = "grid";
 
@@ -1209,7 +1213,7 @@ $('body').on('click','.grid-switch', function(){
 
 $('body').on('click','.list-switch', function(){
 
-	if( $('body').hasClass("front-page") ){
+	if(  window.location.href.indexOf("/r/") == -1 && window.location.href.indexOf("/m/") == -1  ){
 
 		currentSettings.global.layout = "list";
 
@@ -1383,6 +1387,12 @@ $('body').on('change','#settings-night-mode',function(){
 
 		chrome.storage.sync.set({"shine": currentSettings}, function(){
 
+			if( !$('#nightSwitchToggleContainer').hasClass("enabled") ){
+
+				$('#nightSwitchToggleContainer').click();
+
+			}
+
 			$('html').addClass("res-nightmode");
 			$('body').addClass("res-nightmode");
 
@@ -1395,6 +1405,12 @@ $('body').on('change','#settings-night-mode',function(){
 		currentSettings.global.night = "off";
 
 		chrome.storage.sync.set({"shine": currentSettings}, function(){
+
+			if( $('#nightSwitchToggleContainer').hasClass("enabled") ){
+
+				$('#nightSwitchToggleContainer').click();
+
+			}
 
 			$('html').removeClass("res-nightmode");
 			$('body').removeClass("res-nightmode");
