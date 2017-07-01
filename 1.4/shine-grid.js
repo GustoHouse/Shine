@@ -720,18 +720,25 @@ function createPreviews(theThings){
 		// setting up variables
 
 		url = $(theThings[i]).find('a.title').attr("href").replace(".httml","");
-
 		extension = url.substr(url.lastIndexOf('.')+1);
 
+		// figuring out where to place our preview
+		whereToPlace = '.entry';
+		if( $(theThings[i]).find('.top-matter').length ){
+			whereToPlace = '.top-matter';
+		}
+
+
 		// global changes to every card
-    if( $(theThings[i]).find('ul.flat-list a.comments').html() != undefined ){
+   		if( $(theThings[i]).find('ul.flat-list a.comments').html() != undefined ){
 
 		    $(theThings[i]).find('ul.flat-list a.comments').html( $(theThings[i]).find('ul.flat-list a.comments').html().replace(/\D/g,'') );
 
-    }
+   	 	}
 
 		$(theThings[i]).find('ul.flat-list a.comments').attr("target","_blank");
 		$(theThings[i]).find('a.title').attr("target","_blank");
+
 
 
 
@@ -758,7 +765,7 @@ function createPreviews(theThings){
 
 				albumAPI = "https://api.imgur.com/3/album/" + albumID + "/images";
 
-				$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
+				$(theThings[i]).find(whereToPlace).append("<div class='preview preview-replace'></div>");
 
 				getAlbumImage(albumAPI, ".id-" + $(theThings[i]).attr("data-fullname"));
 
@@ -780,7 +787,7 @@ function createPreviews(theThings){
 
 				galleryAPI = "https://api.imgur.com/3/gallery/album/" + galleryID;
 
-				$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
+				$(theThings[i]).find(whereToPlace).append("<div class='preview preview-replace'></div>");
 
 				getGalleryImage(galleryAPI, ".id-" + $(theThings[i]).attr("data-fullname"));
 
@@ -795,7 +802,7 @@ function createPreviews(theThings){
 				html5 = url.substr(url.toLowerCase().indexOf("imgur.com/") + 10);
 				html5 = html5.substring(0, html5.length - 5);
 
-				$(theThings[i]).find('.entry').append("<div data-video='//i.imgur.com/" + html5  + ".mp4' class='preview preview-gifv' style='background-image:url(//i.imgur.com/" + html5 + "h.jpg)'></div>");
+				$(theThings[i]).find(whereToPlace).append("<div data-video='//i.imgur.com/" + html5  + ".mp4' class='preview preview-gifv' style='background-image:url(//i.imgur.com/" + html5 + "h.jpg)'></div>");
 
 			}else if( url.toLowerCase().indexOf(".gif") != -1 ){
 
@@ -803,7 +810,7 @@ function createPreviews(theThings){
 				html5 = url.substr(url.toLowerCase().indexOf("imgur.com/") + 10);
 				html5 = html5.substring(0, html5.length - 4);
 
-				$(theThings[i]).find('.entry').append("<div data-video='//i.imgur.com/" + html5  + ".mp4' class='preview preview-gifv' style='background-image:url(//i.imgur.com/" + html5 + "h.jpg)'></div>");
+				$(theThings[i]).find(whereToPlace).append("<div data-video='//i.imgur.com/" + html5  + ".mp4' class='preview preview-gifv' style='background-image:url(//i.imgur.com/" + html5 + "h.jpg)'></div>");
 
 			}else{
 
@@ -823,7 +830,7 @@ function createPreviews(theThings){
 
 				}
 
-				$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
+				$(theThings[i]).find(whereToPlace).append("<div class='preview preview-replace'></div>");
 
 				getImageFromServer("https://i.imgur.com/" + IMGURID + ".png", IMGURID, ".id-" + $(theThings[i]).attr("data-fullname") );
 
@@ -845,7 +852,7 @@ function createPreviews(theThings){
 
 			url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
 
-			$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
+			$(theThings[i]).find(whereToPlace).append("<div class='preview preview-replace'></div>");
 
 			convertGiftoGfy( ".id-" + $(theThings[i]).attr("data-fullname"), url );
 
@@ -865,7 +872,7 @@ function createPreviews(theThings){
 
 			url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
 
-			$(theThings[i]).find('.entry').append("<div data-url='" + url + "' class='preview preview-image' style='background-image:url(" + url + ")'></div>");
+			$(theThings[i]).find(whereToPlace).append("<div data-url='" + url + "' class='preview preview-image' style='background-image:url(" + url + ")'></div>");
 
 		}
 
@@ -879,7 +886,7 @@ function createPreviews(theThings){
         // REDDIT UPLOADS
         else if( url.toLowerCase().indexOf("reddituploads.com") != -1){
 
-			$(theThings[i]).find('.entry').append("<div data-url='" + url + "' class='preview preview-image' style='background-image:url(" + url + ")'></div>");
+			$(theThings[i]).find(whereToPlace).append("<div data-url='" + url + "' class='preview preview-image' style='background-image:url(" + url + ")'></div>");
 
 		}
 
@@ -902,7 +909,7 @@ function createPreviews(theThings){
 				liveMemeURL = liveMemeURL.substring(0, liveMemeURL.length - 1);
 			}
 
-			$(theThings[i]).find('.entry').append("<div data-url='" + liveMemeURL + "' class='preview preview-image' style='background-image:url(" + liveMemeURL + ".jpg)'></div>");
+			$(theThings[i]).find(whereToPlace).append("<div data-url='" + liveMemeURL + "' class='preview preview-image' style='background-image:url(" + liveMemeURL + ".jpg)'></div>");
 
 		}
 
@@ -924,7 +931,7 @@ function createPreviews(theThings){
                 timeStamp = getUrlVars(url)["t"];
                 timeStamp = getYouTubeTimeStamp(timeStamp);
 
-                $(theThings[i]).find('.entry').append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp + "'></div>");
+                $(theThings[i]).find(whereToPlace).append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp + "'></div>");
 
 
             }
@@ -935,7 +942,7 @@ function createPreviews(theThings){
                 timeStamp = getUrlVars(url)["t"];
                 timeStamp = getYouTubeTimeStamp(timeStamp);
 
-                $(theThings[i]).find('.entry').append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp + "'></div>");
+                $(theThings[i]).find(whereToPlace).append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp + "'></div>");
 
             }
 
@@ -960,7 +967,7 @@ function createPreviews(theThings){
             timeStamp = getUrlVars(url)["t"];
             timeStamp = getYouTubeTimeStamp(timeStamp);
 
-            $(theThings[i]).find('.entry').append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp + "'></div>");
+            $(theThings[i]).find(whereToPlace).append("<div style='background-image:url(//img.youtube.com/vi/" + vidID + "/0.jpg)' class='preview preview-youtube' data-video='//www.youtube.com/embed/" + vidID + "?rel=0&autoplay=1&vq=hd1080&wmode=transparent&start=" + timeStamp + "'></div>");
 
 
 		}
@@ -980,7 +987,7 @@ function createPreviews(theThings){
 
 			vidID = url.substr(url.toLowerCase().indexOf("vimeo.com/") + 10);
 
-			$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
+			$(theThings[i]).find(whereToPlace).append("<div class='preview preview-replace'></div>");
 
             getVimeoThumbnail(vidID,  ".id-" + $(theThings[i]).attr("data-fullname"));
 
@@ -994,7 +1001,7 @@ function createPreviews(theThings){
             
             url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
             
-            $(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
+            $(theThings[i]).find(whereToPlace).append("<div class='preview preview-replace'></div>");
             
             getireddit( url, ".id-" + $(theThings[i]).attr("data-fullname") );
             
@@ -1011,7 +1018,7 @@ function createPreviews(theThings){
 
 			url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
 
-			$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
+			$(theThings[i]).find(whereToPlace).append("<div class='preview preview-replace'></div>");
 
 			getRedditText(url, ".sitetable.linklisting .usertext-body .md", ".id-" + $(theThings[i]).attr("data-fullname") );
 
@@ -1030,7 +1037,7 @@ function createPreviews(theThings){
 
 	        url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
 
-	        $(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
+	        $(theThings[i]).find(whereToPlace).append("<div class='preview preview-replace'></div>");
 
 	        getRedditText(url, ".usertext.border .md", ".id-" + $(theThings[i]).attr("data-fullname") );
 
@@ -1050,7 +1057,7 @@ function createPreviews(theThings){
 
 			wikiTitle = url.substr(url.search(/wikipedia/i) + 19);
 
-			$(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
+			$(theThings[i]).find(whereToPlace).append("<div class='preview preview-replace'></div>");
 
 			getWikiContent(wikiTitle, ".id-" + $(theThings[i]).attr("data-fullname"));
 
@@ -1067,7 +1074,7 @@ function createPreviews(theThings){
 
 	        url = url.split(/[?#]/)[0]; // REMOVES QUERY STRING AND HASH
 
-            $(theThings[i]).find('.entry').append("<div class='preview preview-replace'></div>");
+            $(theThings[i]).find(whereToPlace).append("<div class='preview preview-replace'></div>");
 
             getSoundCloudContent( url,  ".id-" + $(theThings[i]).attr("data-fullname") );
 
@@ -1093,7 +1100,7 @@ function createPreviews(theThings){
 	        	gfyID = gfyID.substring(0, gfyID.length - 4);
 	        }
 
-			       $(theThings[i]).find('.entry').append("<div style='background-image:url(//thumbs.gfycat.com/" + gfyID + "-poster.jpg)' class='preview preview-gfycat' data-url='" + gfyID + "'></div>");
+			       $(theThings[i]).find(whereToPlace).append("<div style='background-image:url(//thumbs.gfycat.com/" + gfyID + "-poster.jpg)' class='preview preview-gfycat' data-url='" + gfyID + "'></div>");
 
         }
 

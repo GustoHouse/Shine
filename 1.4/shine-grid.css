@@ -89,7 +89,8 @@ html.SHINE.shine-grid body > .content #siteTable .thing .RES-keyNav-activeElemen
 	background-color: transparent !important;
 }
 
-html.SHINE.shine-grid body > .content #siteTable .thing .entry {
+html.SHINE.shine-grid body > .content #siteTable .thing .entry,
+html.SHINE.shine-grid body > .content #siteTable .thing .top-matter {
     order: 1;
     padding:0px;
     margin:0px;
