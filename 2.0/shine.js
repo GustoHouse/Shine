@@ -2,30 +2,23 @@
 var currentSettings = {};
 
 // creating the default settings variable if they havn't saved any settings yet
-var defaultSettings = {"global" : {"layout" : "list", "shortcuts" : "show", "night" : "off", "analytics" : "shine-analytics-optin", "sidebar" : ""},
+var defaultSettings = {"global" : {"layout" : "list", "shortcuts" : "show", "night" : "off", "analytics" : "shine-analytics-optin", "sidebar" : "", "ratio" : "60/40"},
 
-    "list" :  {"split" : "6040"},
+    "list" :  {},
 
-    "split" : {"split" : "5050"},
+    "split" : {},
 
-    "grid" :  {"width" : "20%", "nsfw" : "no", "split" : "6040"},
-
-    "subreddits" : [
-    	{"url" : "www.reddit.com/r/shine/", "layout" : "list"},
-    	{"url" : "www.reddit.com/r/aww/", "layout" : "grid"},
-    	{"url" : "www.reddit.com/r/earthporn/", "layout" : "list"}
-    ],
-
-    "multireddits" : [
-    	{"url" : "www.reddit.com/user/evilnight/m/redditunes", "layout" : "grid"},
-    	{"url" : "www.reddit.com/user/Abbigale221/m/moviesandtv", "layout" : "list"}
-    ],
+    "grid" :  {"width" : "20%", "nsfw" : "no"},
 
     "account" : {"status" : "shinelight"},
 
     "message" : "Welcome to Shine 2.0!"
 
 };
+
+
+
+
 
 
 
@@ -81,6 +74,13 @@ $(window).scroll(function(event){
 
 
 
+
+
+
+
+
+
+
 // MAIN SHINE FUNCTION
 
 function SHINE(){
@@ -88,66 +88,21 @@ function SHINE(){
     // this makes sure we're on the home page, a subreddit, or a multireddit
 	if( $('body').hasClass("listing-page") && !$('body').hasClass("profile-page") && $('#header-bottom-left .pagename').html() != "preferences" && !$('body').hasClass("subreddits-page") ){
 
-        //time to decide if we're going to load the list view or the grid view
-        var whichView = "";
-
-        //time to check the subreddits
-        if( currentSettings.subreddits.length > 0){
-
-            for(i = 0; i < currentSettings.subreddits.length; i++){
-
-                windowLocation = $('.pagename a').attr("href");
-                subredditURL = currentSettings.subreddits[i].url;
-
-                if( windowLocation != undefined ){
-                    if( windowLocation.indexOf( subredditURL ) != -1 ){
-                        whichView = currentSettings.subreddits[i].layout;
-                    }
-                }
-            }
-
-        }
-
-        // now it's time to check the multireddits
-        if( currentSettings.multireddits.length > 0){
-
-            for(i = 0; i < currentSettings.multireddits.length; i++){
-
-                windowLocation = $('.pagename a').attr("href");
-                multiredditURL = currentSettings.multireddits[i].url;
-
-                if( windowLocation != undefined ){
-                    if( windowLocation.indexOf( multiredditURL ) != -1 ){
-                        whichView = currentSettings.multireddits[i].layout;
-                    }
-                }
-
-            }
-
-        }
-
-        // if whichView is still blank, use the default layout
-        if( whichView == "" ){
-
-            whichView = currentSettings.global.layout;
-
-        }
-        
         // time to load JS
         $.getScript( chrome.extension.getURL("jquery.zoom.min.js") );
         $.getScript( chrome.extension.getURL("shine-content.js") );
 
-        if( whichView == "list" ){
+        if( currentSettings.global.layout == "list" ){
 
             $('html').addClass("shine-list");
 			$.getScript( chrome.extension.getURL("shine-list.js") );
 
-        }else if( whichView == "split" ){
+        }else if( currentSettings.global.layout == "split"){
 
             $('html').addClass("shine-list shine-split");
             $.getScript( chrome.extension.getURL("shine-list.js") );
 
-        }else if( whichView == "grid" ){
+        }else if( currentSettings.global.layout == "grid"){
 
             $('html').addClass("shine-grid");
 			$.getScript( chrome.extension.getURL("shine-grid.js") );

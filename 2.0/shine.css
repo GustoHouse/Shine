@@ -16,7 +16,7 @@ html.shine-ready{
 
 body{
     background-color:#f5f5f5 !important;
-    padding-top:78px !important;
+    padding-top:68px !important;
 }
 
 .organic-listing,
@@ -52,13 +52,13 @@ div#header {
 }
 
 body.hide-header div#header{
-    top:-78px;
+    top:-68px;
 }
 
 table#srList {
     position: fixed;
-    height: calc(100% - 78px) !important;
-    top:78px !important;
+    height: calc(100% - 68px) !important;
+    top:68px !important;
     max-height: none;
 }
 
@@ -66,8 +66,8 @@ table#srList {
     position: fixed;
     left: 0px;
     margin-left: 0px;
-    top: 78px !important;
-    height: calc(100% - 78px) !important;
+    top: 68px !important;
+    height: calc(100% - 68px) !important;
     overflow-y: auto;
 }
 
@@ -76,10 +76,21 @@ table#srList {
     border-bottom: 1px solid #ddd !important;
 }
 
+#RESShortcutsEditContainer,
+#RESShortcutsEditContainer > div{
+    background:transparent;
+}
+
+#sr-more-link {
+    background: white;
+    border-bottom: 1px solid #ddd !important;
+    height: 18px;
+}
+
 #header a#header-img {
     padding: 15px;
     display:block;
-    height: 60px;
+    height: 50px;
     background-image: url(https://upload.wikimedia.org/wikipedia/en/thumb/8/82/Reddit_logo_and_wordmark.svg/1280px-Reddit_logo_and_wordmark.svg.png);
     background-size: auto 30px;
     background-repeat: no-repeat;
@@ -92,25 +103,25 @@ table#srList {
     justify-content: flex-start;
     align-items: center;
     padding: 0px;
-    height:60px;
+    height:50px;
     font-size:0px;
 }
 
 #header #header-img-a{
-    height:60px;
+    height:50px;
     padding:15px;
     display:block;
 }
 
 #header #header-img-a img{
-    height:30px;
+    height:20px;
     width:auto;
     margin:0px;
 }
 
 #header #header-bottom-left .pagename {
     display: block;
-    height: 60px;
+    height: 50px;
     margin:0px;
     border-left:1px solid #ddd;
     position: relative;
@@ -119,8 +130,8 @@ table#srList {
 
 #header #header-bottom-left .pagename a{
     display:block;
-    height:60px;
-    line-height:30px;
+    height:50px;
+    line-height:20px;
     padding:15px;
     margin:0px;
     font-size:15px;
@@ -141,7 +152,7 @@ table#srList {
     background:#fff;
     margin:0px !important;
     padding:0px;
-    height: 60px;
+    height: 50px;
 }
 
 #header ul.tabmenu li{
@@ -160,9 +171,9 @@ table#srList {
 }
 
 #header ul.tabmenu li.selected {
-    height: 60px !important;
+    height: 50px !important;
     display: block;
-    line-height: 60px;
+    line-height: 50px;
     border-bottom:0px;
     order:1;
 }
@@ -200,7 +211,7 @@ table#srList {
 #header div#header-bottom-right {
     position: absolute;
     top: 18px;
-    height: 60px;
+    height: 50px;
     width: auto;
     background: transparent;
     padding: 0px;
@@ -216,9 +227,9 @@ table#srList {
 }
 
 #header-bottom-right form.logout a {
-    height: 60px;
+    height: 50px;
     display: block;
-    line-height: 60px;
+    line-height: 50px;
     font-size: 15px;
     padding: 0 15px;
     border-left: 1px solid #ddd;
@@ -227,25 +238,25 @@ table#srList {
 
 #header #header-bottom-right span#openRESPrefs {
     display: block;
-    height: 60px;
+    height: 50px;
     margin: 0px;
     padding: 0px 15px;
     border-left: 1px solid #ddd;
-    line-height: 60px;
+    line-height: 50px;
     float:left;
 }
 
 #header #header-bottom-right ul.flat-list {
     display: block;
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     float: left;
 }
 
 #header #header-bottom-right ul.flat-list li a {
     display: inline-block;
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     padding: 0 15px;
     border-left: 1px solid #ddd;
     font-size: 15px;
@@ -255,8 +266,8 @@ table#srList {
 #header #header-bottom-right a#mail,
 #header #header-bottom-right a#modmail {
     display: block;
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     top: 0px;
     margin: 0px;
     position: relative;
@@ -270,8 +281,8 @@ table#srList {
 #header #header-bottom-right a.message-count {
     display: block;
     float: left;
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     padding: 0 15px 0 5px;
     font-size: 15px;
     border-radius: 0px;
@@ -283,8 +294,8 @@ table#srList {
 #header #header-bottom-right span.user {
     display: block;
     float: left;
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     padding: 0 15px;
     border-left: 1px solid #ddd;
     font-weight: 400;
@@ -295,14 +306,14 @@ table#srList {
     display: block;
     position: relative;
     float: left;
-    height: 60px;
+    height: 50px;
     width: auto;
 }
 
 #header #header-bottom-right .beta-hint a{
     display:block;
-    height:60px;
-    line-height:60px;
+    height:50px;
+    line-height:50px;
     padding:0 15px;
     margin: 0;
     position: relative;
@@ -332,11 +343,11 @@ body.with-listing-chooser .listing-chooser .contents {
 
 .side {
     position: fixed;
-    right: -360px;
+    right: -350px;
     padding: 30px;
-    width: 360px;
-    height: calc(100% - 78px);
-    top: 78px;
+    width: 350px;
+    height: calc(100% - 68px);
+    top: 68px;
     overflow-y: auto;
     transition: right 300ms ease;
     margin: 0;

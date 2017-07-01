@@ -629,8 +629,6 @@ function getGalleryImage(api, target){
       dataType: 'json',
       success: function(data) {
 
-          console.log(data);
-
           if( data.data.images.length > 1 ){
 
                 albumAPI = "https://api.imgur.com/3/album/" + data.data.id + "/images";
@@ -721,7 +719,8 @@ function createPreviews(theThings){
 
 		// setting up variables
 
-		url = $(theThings[i]).find('a.title').attr("data-href-url").replace(".httml","");
+		url = $(theThings[i]).find('a.title').attr("href").replace(".httml","");
+
 		extension = url.substr(url.lastIndexOf('.')+1);
 
 		// global changes to every card
@@ -1126,7 +1125,6 @@ function createPreviews(theThings){
 }
 
 createPreviews( $('body > .content #siteTable .thing') );
-
 
 
 

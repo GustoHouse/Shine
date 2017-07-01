@@ -690,7 +690,7 @@ $('body').on('click','div.content div#siteTable.linklisting > .thing:not(.shine-
 		theExpand = $("#expand-" + $(this).data("fullname"));
 
 		// time to decide what kind of link this is
-		url = $(this).find('a.title').attr("data-href-url");
+		url = $(this).find('a.title').attr("data-shine-url");
         
 		// IMGUR
 		if( url.toLowerCase().indexOf("imgur.com") != -1 && url.toLowerCase().indexOf("gifsound.com") == -1){
@@ -1886,13 +1886,21 @@ $(document).on('keyup keydown', function(e){
 
 
 
+function shineHREF(){
 
+	theShinedThings = $('body > .content #siteTable > .thing').not(".shined-thing");
 
+	for( i =  0; i < theShinedThings.length; i++){
 
+		$(theShinedThings[i]).find('a.title').attr("data-shine-url", $(theShinedThings[i]).find('a.title').attr("href"));
 
+		$(theShinedThings[i]).addClass("shined-thing");
 
+	}
 
+}
 
+shineHREF();
 
 
 
@@ -1904,6 +1912,8 @@ $(document).on('keyup keydown', function(e){
 if( $('body').hasClass('res') ){
 
 	window.addEventListener("neverEndingLoad", function() {
+
+		shineHREF();
 
 		if( !$('html').hasClass("shine-analytics-optout") ){
 
@@ -1947,6 +1957,8 @@ if( $('body').hasClass('res') ){
 			     $('body > .content #siteTable').append( $(data).find('#siteTable .thing') );
 
 			     loading = false;
+
+				 shineHREF();
 			      
 			  },
 		      error: function(request, status, message) { 

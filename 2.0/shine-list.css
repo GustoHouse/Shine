@@ -1,6 +1,50 @@
+html.shine-list .thing .rank,
+html.shine-list .thing .expando-button {
+    display: none;
+}
+
+html.shine-list .content{
+    box-shadow: 2px 2px 10px rgba(0,0,0,.2);
+}
+
 html.shine-list .content #siteTable .thing {
     background: #fff;
     margin: 0px;
-    padding: 10px;
+    padding: 10px 20px;
+    border:0px;
     border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+html.shine-list .thing a.thumbnail {
+    order: 1;
+    width: 70px;
+    min-width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+html.shine-list .thing a.thumbnail.default, html.shine-list .thing a.thumbnail.self {
+    height: 50px;
+}
+
+html.shine-list .thing .midcol {
+    order: 2;
+    width:50px !important;
+}
+
+html.shine-list .thing .entry {
+    order: 3;
+    flex-grow: 1;
+}
+
+html.shine-list .thing a.thumbnail,
+html.shine-list .thing .midcol {
+    margin: 0 10px 0 0;
 }
